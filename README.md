@@ -4,6 +4,8 @@ A momentum courier platformer. **If there's an address, we deliver.**
 
 This is the first **Milestone 1 movement laboratory**, not the finished campaign. Run, jump, wall-kick, slide, build slope/conveyor speed, ride lifts, and launch from a piston. Collect the parcel and reach the green delivery bay. A lower floor supports recovery and route experiments.
 
+**Build 02:** corrected the ramp's false crush, opened the wall station's lower passage and made its upper climb passable. Deaths now explain the actual hazard after retry. Both complete routes are covered by input replays and browser playtests.
+
 ## Run locally
 
 Requires Node.js 20+; there are no packages to install.
@@ -36,3 +38,5 @@ node --test tests/*.test.mjs
 ```
 
 See [implementation GDD](docs/IMPLEMENTATION_GDD.md), [milestone status](docs/MILESTONE_1.md), and [playtest protocol](docs/PLAYTEST.md). Physics is independent of Canvas and DOM; no build step is required. Static asset URLs are relative for eventual GitHub Pages hosting. No remote is configured by this scaffold.
+
+For repeatable visual verification, open `/tests/playtest.html` on the running server. Its lower and wall routes use ordinary inputs through the same simulation and renderer; they never warp or save records. Pause and advance in quarter-second steps to inspect problem areas.

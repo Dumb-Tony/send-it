@@ -7,7 +7,7 @@
 </head>
 <body>
   <main>
-    <header><div class="brand">SEND IT<span>IF THERE'S AN ADDRESS, WE DELIVER.</span></div><div class="build">DEVELOPMENT BUILD <b>01 / MOVEMENT LAB</b></div></header>
+    <header><div class="brand">SEND IT<span>IF THERE'S AN ADDRESS, WE DELIVER.</span></div><div class="build">DEVELOPMENT BUILD <b>02 / MOVEMENT LAB</b></div></header>
     <section class="dashboard" aria-label="Run statistics">
       <div><span>DISPATCH 000</span><strong>The proving ground</strong></div>
       <div><span>RUN TIME</span><strong id="time">00:00.000</strong></div>
@@ -15,6 +15,7 @@
       <div><span>MOMENTUM</span><strong id="speed">0 <small>px/s</small></strong></div>
       <button id="restart">Restart <kbd>R</kbd></button>
     </section>
+    <p id="feedback" role="status" aria-live="polite" hidden></p>
     <div class="stage">
       <canvas id="game" width="1280" height="720" tabindex="0" aria-label="SEND IT platforming movement laboratory. Move with A and D, jump with Space, crouch with S, restart with R."></canvas>
       <div id="overlay" hidden><span id="result-label">DELIVERED</span><strong id="result-time"></strong><p id="result-detail"></p><button id="again">Send it again ↗</button></div>

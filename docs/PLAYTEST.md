@@ -2,6 +2,8 @@
 
 Use a desktop browser at 100% zoom. Turn on F2 when investigating contact behavior. The room is for tuning; 1–7 warps are deliberately unranked.
 
+Before delivering a movement or layout change, run the automated tests **and** open `/tests/playtest.html` on the local server. Play both complete input replays in the browser and inspect the changed station with Pause / Advance ¼ second. Then check the actual game's keyboard input, death feedback and retry. A smoke test that only loads the page is not sufficient. Replays prove route reachability; they do not replace movement-feel feedback.
+
 1. **Three minutes: runway.** Tap and hold movement, reverse, stop, short-hop and full jump. Does acceleration feel intentional? Does air control preserve commitment?
 2. **Three minutes: walls.** Use station 3. Steer into each wall and kick repeatedly with separate jump presses. Test buffered jumps and late edge jumps. Log sticky corners and unexpected speed loss.
 3. **Three minutes: slide and slope.** Station 2. Descend the ramp, hold S through the low passage, release under the ceiling, reverse uphill. Standing must wait for clearance. The low lip should step automatically at ordinary speed.

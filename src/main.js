@@ -3,7 +3,7 @@ import { createWorld,reset,step,DT,PHYSICS_VERSION } from './physics.js';
 import { createRenderer } from './render.js';
 const $=id=>document.getElementById(id),canvas=$('game'),world=createWorld(lab),render=createRenderer(canvas);
 const keys=new Set();let jumpPressed=false,jumpReleased=false,paused=false,debug=false,accumulator=0,last=0,deathDelay=0,cameraReset=true;
-let best=null,soundContext=null,storageAvailable=true;
+let best=null,soundContext=null,storageAvailable=true,feedbackUntil=0;
 const saveKey=`send-it:pb:${PHYSICS_VERSION}:${lab.id}:${lab.version}`;
 try{const value=JSON.parse(localStorage.getItem(saveKey));if(typeof value==='number'&&Number.isFinite(value)&&value>0)best=value;}catch{storageAvailable=false;}
 const format=s=>`${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toFixed(3).padStart(6,'0')}`;
@@ -42,11 +42,12 @@ function frame(now){
   if(!paused){
     accumulator+=elapsed;
     while(accumulator>=DT){
-      if(world.status==='dead'){deathDelay+=DT;if(deathDelay>=.35){const practice=world.practice;restart();world.practice=practice;}}
+      if(world.status==='dead'){deathDelay+=DT;if(deathDelay>=.35)restart(world.station);}
       else{
         step(world,{left:keys.has('KeyA')||keys.has('ArrowLeft'),right:keys.has('KeyD')||keys.has('ArrowRight'),down:keys.has('KeyS')||keys.has('ArrowDown'),jumpPressed,jumpReleased});
         jumpPressed=false;jumpReleased=false;
         for(const event of world.events)sound(event);
+        if(world.events.includes('death')){$('feedback').textContent=`Last attempt: ${world.failure.cause}. ${world.failure.hint}`;$('feedback').hidden=false;feedbackUntil=now+6500;}
         if(world.events.includes('complete'))completed();
       }
       accumulator=Math.max(0,accumulator-DT);
@@ -54,6 +55,7 @@ function frame(now){
   }
   render(world,{debug,reducedMotion:$('reduced-motion').checked,elapsed:paused?0:elapsed,resetCamera:cameraReset});cameraReset=false;
   $('time').textContent=format(world.time);$('speed').textContent=`${Math.round(Math.abs(world.p.vx))} px/s`;
+  if(now>feedbackUntil)$('feedback').hidden=true;
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);

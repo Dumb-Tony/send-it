@@ -1,6 +1,6 @@
 # SEND IT — Implementation Game Design Document
 
-Version 0.1 • 12 September 2026 • Working implementation specification
+Version 0.2 • 12 September 2026 • Working implementation specification
 
 **A momentum platformer about getting a package where it absolutely should not be possible to deliver.**
 
@@ -99,7 +99,7 @@ Slide currently changes friction and collider; standing requires free headroom. 
 
 Use explicit line-segment surfaces for initial ramps, rectangle solids for walls/floors, and dedicated movers. Sample ramp height beneath the courier center; snap downward only when already supported or crossing from above. Never teleport a player through a ramp from underneath. Downhill acceleration preserves launch speed; uphill loses energy. Follow-up work should project launch direction along the slope tangent if playtests show the horizontal-velocity approximation is insufficient.
 
-Integration subdivides a fixed tick into spatial steps no larger than 6 px to prevent tunneling through current thin geometry. Resolve axis contacts, handle slope top surfaces and detect unresolved overlap as crushing. A future broadphase can use a spatial hash after profiling; the laboratory uses bounded arrays. Test corners, seams, ceilings, slope endpoints, competing contacts and both travel directions.
+Integration subdivides a fixed tick into spatial steps no larger than 6 px to prevent tunneling through current thin geometry. Resolve axis contacts and slope top surfaces, preserving adjacent flat support at seams. Only moving machinery can cause a crush; static overlap must be resolved without killing the courier. A future broadphase can use a spatial hash after profiling; the laboratory uses bounded arrays. Test corners, seams, ceilings, slope endpoints, competing contacts and both travel directions. Require complete input-only route tests and browser replay inspection for movement/layout changes, not just isolated component tests.
 
 Movers use deterministic time functions. Standing riders inherit displacement. Jumping inherits horizontal platform velocity and upward vertical velocity once. An upward machine that reaches a player can lift them; a trapped player dies. The initial sinusoidal piston is a launch test, not final industrial animation. Final machinery should expose wind-up, active and recovery phases, with visuals and sound derived from the same phase data.
 

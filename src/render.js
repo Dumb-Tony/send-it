@@ -47,7 +47,7 @@ export function createRenderer(canvas){
       const stride=p.grounded&&Math.abs(p.vx)>20?Math.sin(w.time*24)*3:0;
       rect(p.x+2,p.y+p.h-6,8,6+stride,'#e9efe8');rect(p.x+14,p.y+p.h-6,8,6-stride,'#e9efe8');
       if(w.parcel){rect(p.x+(p.facing>0?-7:20),p.y+12,11,14,'#df9361');}
-    }else {text('BONK.',p.x-15,p.y-15,20,'#f1a184');}
+    }else {text(w.failure?.cause||'RETRY',p.x-45,p.y-20,16,'#f1a184');ctx.strokeStyle='#f1a184';ctx.lineWidth=3;ctx.strokeRect(p.x-5,p.y-5,p.w+10,p.h+10);}
     if(debug){ctx.strokeStyle='#8fffaa';ctx.strokeRect(p.x,p.y,p.w,p.h);ctx.beginPath();ctx.moveTo(p.x+12,p.y+18);ctx.lineTo(p.x+12+p.vx*.18,p.y+18+p.vy*.18);ctx.stroke();}
     ctx.restore();
     rect(20,20,250,50,'#152831dd');text(w.practice?'PRACTICE / RECORDS OFF':w.parcel?'PARCEL SECURED → DELIVERY BAY':'COLLECT THE PARCEL →',34,41,12,'#f3cc85');text(w.started?'1–7: jump to a lab station':'A / D TO START · SPACE TO JUMP',34,59,10);

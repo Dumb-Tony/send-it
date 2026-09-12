@@ -1,5 +1,5 @@
 export const DT = 1/120;
-export const PHYSICS_VERSION = 'lab-0.1';
+export const PHYSICS_VERSION = 'lab-0.2';
 export const TUNE = Object.freeze({width:24,height:36,crouchHeight:22,accel:1900,airAccel:800,runSpeed:390,maxSpeed:1100,friction:1550,airDrag:45,gravity:1850,jump:620,jumpCut:0.48,fallSpeed:1150,wallFall:150,wallKick:440,coyote:0.09,buffer:0.12,slopeGravity:1100,slideFriction:85});
 export const overlap=(a,b)=>a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
 const approach=(v,t,d)=>v<t?Math.min(v+d,t):Math.max(v-d,t);
@@ -16,11 +16,11 @@ export function createWorld(level) {
 export function reset(w,station=-1) {
   const s=station<0?w.level.spawn:w.level.stations[station];
   w.p={x:s.x,y:s.y,w:TUNE.width,h:TUNE.height,vx:0,vy:0,grounded:false,groundId:null,wall:0,coyote:0,buffer:0,cutBuffered:false,wallLock:0,facing:1,state:'air',slope:0};
-  w.time=0;w.ticks=0;w.started=false;w.status='ready';w.parcel=false;w.practice=station>=0;w.events=[];
+  w.time=0;w.ticks=0;w.started=false;w.status='ready';w.parcel=false;w.practice=station>=0;w.station=station;w.events=[];w.failure=null;
   w.machines=w.level.movers.map(m=>({...machineAt(m,0),vx:0,vy:0,dx:0,dy:0}));
 }
 function jump(w,vx,vy) {const p=w.p;p.vx=vx;p.vy=vy;p.grounded=false;p.groundId=null;p.coyote=0;p.buffer=0;w.events.push('jump');}
-function die(w) {if(w.status==='dead')return;w.status='dead';w.deaths++;w.events.push('death');}
+function die(w,cause,hint,objectId) {if(w.status==='dead')return;w.failure={cause,hint,objectId,x:w.p.x,y:w.p.y};w.status='dead';w.deaths++;w.events.push('death');}
 export function step(w,input={},dt=DT) {
   w.events=[];
   if(w.status==='dead'||w.status==='complete')return;
@@ -63,7 +63,7 @@ export function step(w,input={},dt=DT) {
   // Spatial microsteps bound displacement below the thinnest collision surface.
   const count=Math.max(1,Math.ceil(Math.max(Math.abs(p.vx*dt),Math.abs(p.vy*dt))/6));
   for(let n=0;n<count;n++){
-    const beforeX=p.x;const beforeY=p.y;const oldFeet=p.y+p.h;
+    const beforeX=p.x;const oldFeet=p.y+p.h;
     p.x+=p.vx*dt/count;
     for(const b of blocks)if(overlap(p,b)){
       // Auto-step only short lips, at low speed, with clear headroom.
@@ -73,6 +73,7 @@ export function step(w,input={},dt=DT) {
       if(beforeX+p.w<=b.x+0.5){p.x=b.x-p.w;p.wall=1;p.vx=0;}
       else if(beforeX>=b.x+b.w-0.5){p.x=b.x+b.w;p.wall=-1;p.vx=0;}
     }
+    const beforeY=p.y; // Auto-step may have changed height during horizontal resolution.
     p.y+=p.vy*dt/count;
     for(const b of blocks)if(overlap(p,b)){
       if(beforeY+p.h<=b.y+Math.max(1,Math.abs(b.dy||0))&&p.vy>=0){
@@ -82,19 +83,33 @@ export function step(w,input={},dt=DT) {
     for(const s of level.slopes){
       const center=p.x+p.w/2;
       if(center<s.x||center>s.x+s.w)continue;
-      const slope=(s.y2-s.y1)/s.w,surface=s.y1+(center-s.x)*slope;
+      const slope=(s.y2-s.y1)/s.w;
+      let surface=s.y1+(center-s.x)*slope;
+      // At a flat/ramp seam, the trailing foot is still on the flat top.
+      // Do not let center sampling pull the collider into that support.
+      for(const b of blocks)if(p.x+p.w>b.x&&p.x<b.x+b.w&&oldFeet<=b.y+0.5)surface=Math.min(surface,b.y);
       const previous=s.y1+clamp(beforeX+p.w/2-s.x,0,s.w)*slope;
       if(p.vy>=0&&oldFeet<=previous+8&&p.y+p.h>=surface-(wasGrounded?8:0)) {p.y=surface-p.h;p.vy=0;p.grounded=true;p.groundId=s.id;p.slope=slope;}
     }
-    if(level.hazards.some(h=>overlap(p,h))){die(w);return;}
+    const hazard=level.hazards.find(h=>overlap(p,h));
+    if(hazard){die(w,hazard.name||'Hit a marked hazard',hazard.hint||'Coral-striped surfaces are dangerous. Jump clear of them.',hazard.id);return;}
   }
   // Stable wall contact when the previous collision removed horizontal velocity.
   for(const b of blocks)if(p.y+p.h>b.y+2&&p.y<b.y+b.h-2){if(Math.abs(p.x+p.w-b.x)<0.1)p.wall=1;if(Math.abs(p.x-b.x-b.w)<0.1)p.wall=-1;}
   if(!p.grounded&&p.wall&&p.vy>TUNE.wallFall&&dir===p.wall)p.vy=TUNE.wallFall;
   // A rising platform presses into the player; lift them onto its top, then detect crushing.
   for(const m of w.machines)if(overlap(p,m)&&m.dy<0){p.y=m.y-p.h;p.vy=Math.min(0,p.vy);p.grounded=true;p.groundId=m.id;}
-  if(blocks.some(b=>overlap({x:p.x+0.2,y:p.y+0.2,w:p.w-0.4,h:p.h-0.4},b))) {die(w);return;}
-  if(p.y>level.height+80){die(w);return;}
+  const trapped=blocks.find(b=>overlap({x:p.x+0.2,y:p.y+0.2,w:p.w-0.4,h:p.h-0.4},b));
+  if(trapped) {
+    const movingContact=w.machines.some(m=>m.id===p.groundId||overlap(p,m));
+    if(movingContact){die(w,'Crushed by machinery','Jump off the moving platform before it presses you into a ceiling.',trapped.id);return;}
+    // Ordinary solid geometry blocks movement; it is never a lethal surface.
+    const corrections=[{axis:'x',d:trapped.x-p.x-p.w},{axis:'x',d:trapped.x+trapped.w-p.x},{axis:'y',d:trapped.y-p.y-p.h},{axis:'y',d:trapped.y+trapped.h-p.y}];
+    const correction=corrections.sort((a,b)=>Math.abs(a.d)-Math.abs(b.d))[0];
+    p[correction.axis]+=correction.d;
+    if(correction.axis==='x')p.vx=0;else {p.vy=0;if(correction.d<0){p.grounded=true;p.groundId=trapped.id;}}
+  }
+  if(p.y>level.height+80){die(w,'Fell outside the lab','Land on the lower recovery floor or press R to retry.','bounds');return;}
   if(!w.parcel&&overlap(p,level.parcel)){w.parcel=true;w.events.push('pickup');}
   if(w.parcel&&overlap(p,level.delivery)){w.status='complete';w.events.push('complete');}
   p.state=p.grounded?(p.h<TUNE.height?'slide':Math.abs(p.vx)>10?'run':'idle'):p.wall&&p.vy>0?'wall slide':p.vy<0?'rise':'fall';
