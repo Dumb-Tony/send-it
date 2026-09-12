@@ -1,10 +1,10 @@
 // World units are pixels. Y increases downward. Every machine phase resets per attempt.
 export const lab = {
-  id:'movement-lab', version:2, width:3000, height:1100,
+  id:'movement-lab', version:3, width:3000, height:1100,
   spawn:{x:70,y:834}, parcel:{x:292,y:830,w:22,h:22},
   delivery:{x:2810,y:292,w:110,h:88},
   targets:{express:45,sendIt:30,unhinged:22},
-  stations:[{x:70,y:834},{x:570,y:774},{x:1090,y:834},{x:1460,y:820},{x:1820,y:834},{x:2175,y:804},{x:2460,y:584}],
+  stations:[{x:70,y:834},{x:570,y:774},{x:1090,y:834},{x:1460,y:820},{x:1820,y:834},{x:2175,y:804},{x:2460,y:584},{x:2290,y:834}],
   solids:[
     {id:'floor',x:0,y:870,w:3000,h:230},
     {id:'left',x:-40,y:0,w:40,h:1100},{id:'right',x:3000,y:0,w:40,h:1100},
@@ -16,6 +16,7 @@ export const lab = {
     {id:'fan-deck',x:1950,y:525,w:130,h:24},
     {id:'upper',x:2020,y:435,w:130,h:24},
     {id:'lift-deck',x:2380,y:620,w:130,h:25},
+    {id:'ledge-practice',x:2340,y:744,w:100,h:20},
     {id:'goal-deck',x:2700,y:380,w:300,h:30}
   ],
   slopes:[{id:'ramp',x:600,w:150,y1:814,y2:870}],
@@ -34,6 +35,7 @@ export const lab = {
     {x:1440,y:750,title:'04 / CONVEYOR',sub:'Borrow some speed.'},
     {x:1770,y:450,title:'05 / FAN',sub:'Air is a route.'},
     {x:2100,y:295,title:'06 / PISTON',sub:'Jump on the upstroke.'},
-    {x:2470,y:250,title:'07 / MOVING LIFT',sub:'Ride it. Launch from it.'}
+    {x:2470,y:250,title:'07 / MOVING LIFT',sub:'Ride it. Launch from it.'},
+    {x:2280,y:802,title:'08 / LEDGE ASSIST',sub:'Approach slowly. Hold toward the edge to climb.'}
   ]
 };

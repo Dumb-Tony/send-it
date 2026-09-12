@@ -1,6 +1,18 @@
 # Milestone 1 — Movement laboratory
 
-Status: **Build 02; route blockers corrected, feel gate not yet passed.**
+Status: **Build 03; accepted movement tuning retained, ledge assistance and platform departures added.**
+
+## Build 03 — ledges and machinery transfers
+
+The user reported Build 02 felt much better. Ground acceleration, ordinary speed, air acceleration, friction, gravity, jump strength, jump cut and wall-kick tuning are unchanged in this pass.
+
+- A slow descending approach toward a static edge can catch it when the hands are within 10 px of the top and the climb destination is clear. Neutral input holds the ledge. Holding toward it for 120 ms starts a 160 ms vertical-then-horizontal mantle; Down or away drops, and Space wall-kicks out. No extra action button.
+- Catching excludes crouching, buffered jumps, upward motion, fast approaches and moving platforms. A fast wall impact cannot immediately become a low-speed catch just because collision removed its velocity. Every mantle step checks solid/hazard clearance.
+- Added optional station **8** beside the piston/lift area, reachable with a normal jump from its floor. On-screen hang controls explain climbing, dropping and kicking.
+- Stepping off a moving support inherits its velocity once. A late coyote jump preserves upward launch assistance without doubling horizontal speed. Deliberate platform jumps retain their existing behavior.
+- Physics is now `lab-0.3`; level data is v3, keeping record categories separate.
+
+Validation: **34 automated tests passed**, including ledge catch/hold/climb, left/right symmetry, drop cooldown, exactly one kick event, headroom rejection, hazards entering a hanging pose, fast/slide/jump priority, input-only station-8 reachability, horizontal platform departures and rising-platform coyote jumps. The original complete delivery and ramp regression checks still pass. Browser verification includes a visibly hanging courier, the mantle transition and `LEDGE CHECK PASSED` at x2342/y708, plus rerunning both full delivery routes. Browser replays do not replace further player feedback on feel.
 
 ## Build 02 — route and collision fixes
 
@@ -23,7 +35,7 @@ User playtesting identified an unexplained BONK near the ramp and a wall station
 - Wall slides/kicks, crouch/slide clearance and low-speed 30 px auto-step.
 - Slopes, conveyor acceleration, fan force, piston and moving lift.
 - Moving support carry, launch velocity inheritance, hazard/crush detection.
-- Seven-station test room with practice warps and recovery floor.
+- Eight-station test room with practice warps and recovery floor.
 - Parcel pickup, delivery trigger, timer, provisional rankings and local best.
 - Immediate R retry, 350 ms automatic death retry, pause and focus handling.
 - Telemetry, reduced trails and optional placeholder synthesized sound.
@@ -41,7 +53,7 @@ Initial test findings fixed: conveyor and piston practice spawns overlapped thei
 
 1. Expand beyond the two verified end-to-end routes to more improvised recovery and machinery chains.
 2. Run the documented 20-minute feel session and tune inertia, air steering, camera and machine phase response from feedback.
-3. Decide and implement full low-speed ledge grab/hang/mantle, or deliberately keep the smaller auto-step assist. Current auto-step is not a full ledge system.
+3. Gather playtest feedback on the new ledge catch window and climb timing, especially near intended wall jumps. Moving-edge hanging remains excluded intentionally.
 4. Expand collision trials for diagonal mover contacts, ramp endpoints and high-speed corner chains. Current headless checks validate specific cases, not every geometry arrangement.
 5. Exercise result/personal-best persistence and denied storage end-to-end in the browser; test Chrome/Edge/Firefox independently.
 6. Tune rank thresholds from actual runs. Current 45/30/22-second values are placeholders.

@@ -4,7 +4,7 @@ A momentum courier platformer. **If there's an address, we deliver.**
 
 This is the first **Milestone 1 movement laboratory**, not the finished campaign. Run, jump, wall-kick, slide, build slope/conveyor speed, ride lifts, and launch from a piston. Collect the parcel and reach the green delivery bay. A lower floor supports recovery and route experiments.
 
-**Build 02:** corrected the ramp's false crush, opened the wall station's lower passage and made its upper climb passable. Deaths now explain the actual hazard after retry. Both complete routes are covered by input replays and browser playtests.
+**Build 03:** keeps the accepted movement tuning and adds slow static ledge catches, climbing, dropping and kick-offs. Walking off a moving platform now retains its motion. The ramp and wall fixes from Build 02 remain covered by full-route regressions.
 
 ## Run locally
 
@@ -27,7 +27,9 @@ Open http://127.0.0.1:4173 in a desktop browser. If the port is occupied, set `$
 | R | Immediate retry |
 | Escape | Pause |
 | F2 | Physics telemetry |
-| 1–7 | Teleport to a lab station; records disabled |
+| 1–8 | Teleport to a lab station; records disabled |
+
+**Station 8 tests ledges:** approach slowly while falling, hold toward the edge to climb, Down to drop, or Space to kick away. Fast approaches and slide input bypass the catch.
 
 The timer starts with movement. Death retries after 350 ms. Personal bests are saved locally and keyed by physics and level version. Lab rank targets are provisional. Sound is opt-in; reduced motion follows the system preference and can be changed below the game. No touch controls yet.
 

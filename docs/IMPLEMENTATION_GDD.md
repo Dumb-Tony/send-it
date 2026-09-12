@@ -1,6 +1,6 @@
 # SEND IT — Implementation Game Design Document
 
-Version 0.2 • 12 September 2026 • Working implementation specification
+Version 0.3 • 12 September 2026 • Working implementation specification
 
 **A momentum platformer about getting a package where it absolutely should not be possible to deliver.**
 
@@ -53,7 +53,7 @@ Long-term: climb districts, discover optional Black Label deliveries, personaliz
 | R | Restart | Immediate, no confirmation, resets all machine phases and run clock |
 | Escape | Pause | Clear held inputs to prevent stuck motion |
 | F2 | Telemetry | Lab developer overlay only |
-| 1–7 | Lab station | Practice mode; disqualifies record saving |
+| 1–8 | Lab station | Practice mode; disqualifies record saving |
 
 Input is captured independently of simulation. Consume edge events once per physics tick, not once per rendered frame. Ignore keyboard auto-repeat for jump presses. On blur or hidden tab, pause and clear held input; require deliberate resume. Interactive page controls retain normal keyboard operation. Controller support in the slice should map left stick/D-pad, south button jump and down/shoulder slide, with remapping in accessibility settings. Keyboard remains the M1 acceptance path.
 
@@ -93,7 +93,7 @@ States are idle, run, crouch/slide, rising, falling, wall slide, later ledge han
 
 Grounded and wall contacts are geometric results, not animation states. Ground jump spends coyote time. Wall jump requires actual contact and an independent press; same-wall climbing may be allowed if repeated movement remains skillful, but never create unlimited buffered kicks from one held key. Wall impulses preserve useful speed and always push away. Jump release only affects upward motion. Input acceleration must not snap conveyor or platform boosts back to ordinary run speed.
 
-Slide currently changes friction and collider; standing requires free headroom. A full ledge grab should be forgiving only at low speed: detect a reachable top from a side contact, test the entire standing clearance, hang for at most a short assist window, jump or move toward the ledge to mantle, down to drop. It must not steal intentional high-speed wall jumps. **M1 first build implements low-speed auto-step up to 30 px, not a complete hanging/mantling system.** Full ledge behavior is a gated movement follow-up.
+Slide changes friction and collider; standing requires free headroom. Build 03 adds a low-speed static ledge catch alongside the existing 30 px auto-step. Catch only while descending below 260 px/s, approaching at no more than 180 px/s, holding toward the wall, and with hands within 10 px of its top. Reject blocked standing clearance, crouching, buffered jump or recent high-speed wall contact. Neutral input holds the catch; holding toward the edge for 120 ms starts a collision-checked 160 ms mantle, Down/away drops, and Space kicks outward. This choice preserves jump as the wall-kick action rather than introducing a second jump meaning. Moving ledges are excluded for this iteration. The original running/jumping constants remain unchanged from the user-approved Build 02 baseline.
 
 ### Slopes, collision and moving geometry
 
@@ -101,7 +101,7 @@ Use explicit line-segment surfaces for initial ramps, rectangle solids for walls
 
 Integration subdivides a fixed tick into spatial steps no larger than 6 px to prevent tunneling through current thin geometry. Resolve axis contacts and slope top surfaces, preserving adjacent flat support at seams. Only moving machinery can cause a crush; static overlap must be resolved without killing the courier. A future broadphase can use a spatial hash after profiling; the laboratory uses bounded arrays. Test corners, seams, ceilings, slope endpoints, competing contacts and both travel directions. Require complete input-only route tests and browser replay inspection for movement/layout changes, not just isolated component tests.
 
-Movers use deterministic time functions. Standing riders inherit displacement. Jumping inherits horizontal platform velocity and upward vertical velocity once. An upward machine that reaches a player can lift them; a trapped player dies. The initial sinusoidal piston is a launch test, not final industrial animation. Final machinery should expose wind-up, active and recovery phases, with visuals and sound derived from the same phase data.
+Movers use deterministic time functions. Standing riders inherit displacement. Jumping inherits horizontal platform velocity and upward vertical velocity once. Walking off inherits platform motion once as well; a coyote jump preserves upward assistance without reapplying horizontal velocity. An upward machine that reaches a player can lift them; a trapped player dies. The initial sinusoidal piston is a launch test, not final industrial animation. Final machinery should expose wind-up, active and recovery phases, with visuals and sound derived from the same phase data.
 
 ## 6. Machinery contracts
 

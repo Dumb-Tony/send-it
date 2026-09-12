@@ -20,7 +20,7 @@ function completed(){
   $('result-detail').textContent=`${pb?'New personal best. ':''}${world.practice?'Practice run — no record saved.':`Express ${targets.express}s · Send It ${targets.sendIt}s`}${storageAvailable?'':' Storage unavailable; record lasts this session.'}`;
   $('overlay').hidden=false;
 }
-const gameKeys=['KeyA','KeyD','KeyS','ArrowLeft','ArrowRight','ArrowDown','Space','KeyR','Escape','F2','Digit1','Digit2','Digit3','Digit4','Digit5','Digit6','Digit7'];
+const gameKeys=['KeyA','KeyD','KeyS','ArrowLeft','ArrowRight','ArrowDown','Space','KeyR','Escape','F2','Digit1','Digit2','Digit3','Digit4','Digit5','Digit6','Digit7','Digit8'];
 window.addEventListener('keydown',e=>{
   if(e.target instanceof HTMLInputElement||e.target instanceof HTMLButtonElement)return;
   if(!gameKeys.includes(e.code))return;e.preventDefault();

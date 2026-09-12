@@ -1,5 +1,5 @@
 {
-  "name": "send-it", "version": "0.2.0", "private": true, "type": "module",
+  "name": "send-it", "version": "0.3.0", "private": true, "type": "module",
   "description": "SEND IT — a momentum courier platformer. Milestone 1 movement laboratory.",
   "scripts": {"start": "node scripts/serve.mjs", "test": "node --test tests/*.test.mjs"},
   "engines": {"node": ">=20"}

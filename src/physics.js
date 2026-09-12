@@ -1,5 +1,5 @@
 export const DT = 1/120;
-export const PHYSICS_VERSION = 'lab-0.2';
+export const PHYSICS_VERSION = 'lab-0.3';
 export const TUNE = Object.freeze({width:24,height:36,crouchHeight:22,accel:1900,airAccel:800,runSpeed:390,maxSpeed:1100,friction:1550,airDrag:45,gravity:1850,jump:620,jumpCut:0.48,fallSpeed:1150,wallFall:150,wallKick:440,coyote:0.09,buffer:0.12,slopeGravity:1100,slideFriction:85});
 export const overlap=(a,b)=>a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
 const approach=(v,t,d)=>v<t?Math.min(v+d,t):Math.max(v-d,t);
@@ -15,12 +15,40 @@ export function createWorld(level) {
 }
 export function reset(w,station=-1) {
   const s=station<0?w.level.spawn:w.level.stations[station];
-  w.p={x:s.x,y:s.y,w:TUNE.width,h:TUNE.height,vx:0,vy:0,grounded:false,groundId:null,wall:0,coyote:0,buffer:0,cutBuffered:false,wallLock:0,facing:1,state:'air',slope:0};
+  w.p={x:s.x,y:s.y,w:TUNE.width,h:TUNE.height,vx:0,vy:0,grounded:false,groundId:null,wall:0,coyote:0,buffer:0,cutBuffered:false,wallLock:0,facing:1,state:'air',slope:0,ledge:null,ledgeCooldown:0,coyoteMoverVy:0};
   w.time=0;w.ticks=0;w.started=false;w.status='ready';w.parcel=false;w.practice=station>=0;w.station=station;w.events=[];w.failure=null;
   w.machines=w.level.movers.map(m=>({...machineAt(m,0),vx:0,vy:0,dx:0,dy:0}));
 }
 function jump(w,vx,vy) {const p=w.p;p.vx=vx;p.vy=vy;p.grounded=false;p.groundId=null;p.coyote=0;p.buffer=0;w.events.push('jump');}
 function die(w,cause,hint,objectId) {if(w.status==='dead')return;w.failure={cause,hint,objectId,x:w.p.x,y:w.p.y};w.status='dead';w.deaths++;w.events.push('death');}
+function objectives(w){
+  if(!w.parcel&&overlap(w.p,w.level.parcel)){w.parcel=true;w.events.push('pickup');}
+  if(w.parcel&&overlap(w.p,w.level.delivery)){w.status='complete';w.events.push('complete');}
+}
+function clearPose(p,blocks,hazards){return ![...blocks,...hazards].some(b=>overlap(p,b));}
+function handleLedge(w,blocks,input,dir,dt){
+  const p=w.p,l=p.ledge;
+  if(!l)return false;
+  const b=blocks.find(b=>b.id===l.id);
+  if(!b){p.ledge=null;return false;}
+  if(!clearPose(p,blocks,w.level.hazards)){p.ledge=null;p.ledgeCooldown=.3;return false;}
+  if(input.down||dir===-l.side||input.jumpPressed){
+    p.ledge=null;p.ledgeCooldown=.3;p.wall=0;
+    if(input.jumpPressed){jump(w,-l.side*TUNE.wallKick,-TUNE.jump*.93);p.wallLock=.13;}
+    else {p.vx=-l.side*60;p.vy=30;}
+    return false;
+  }
+  l.held=dir===l.side?l.held+dt:0;
+  if(l.phase==='hang'&&l.held>=.12){l.phase='mantle';l.time=0;w.events.push('mantle');}
+  if(l.phase==='mantle'){
+    l.time+=dt;const t=Math.min(1,l.time/.16);
+    const next={...p,x:l.x+l.side*(p.w+2)*Math.max(0,(t-.65)/.35),y:l.y-(p.h-8)*Math.min(1,t/.65)};
+    if(!clearPose(next,blocks,w.level.hazards)){p.ledge=null;p.ledgeCooldown=.3;return false;}
+    p.x=next.x;p.y=next.y;
+    if(t===1){p.ledge=null;p.wall=0;p.grounded=true;p.groundId=b.id;p.coyote=TUNE.coyote;p.vx=l.side*90;p.state='run';return true;}
+  }
+  p.vx=0;p.vy=0;p.state=l.phase==='hang'?'ledge hang':'mantle';return true;
+}
 export function step(w,input={},dt=DT) {
   w.events=[];
   if(w.status==='dead'||w.status==='complete')return;
@@ -31,8 +59,15 @@ export function step(w,input={},dt=DT) {
   w.ticks++;w.time=w.ticks*dt;
   w.machines=level.movers.map(m=>{const now=machineAt(m,w.time),old=machineAt(m,w.time-dt);return {...now,dx:now.x-old.x,dy:now.y-old.y,vx:(now.x-old.x)/dt,vy:(now.y-old.y)/dt};});
   const blocks=[...level.solids,...level.conveyors,...w.machines];
+  p.ledgeCooldown=Math.max(0,p.ledgeCooldown-dt);
+  const ledgeJump=!!p.ledge&&input.jumpPressed;
+  if(handleLedge(w,blocks,input,dir,dt)){objectives(w);return;}
+  if(ledgeJump)input={...input,jumpPressed:false};
   const support=blocks.find(b=>b.id===p.groundId);
   const wasGrounded=p.grounded;
+  const approachSpeed=Math.abs(p.vx);
+  let jumped=false;
+  if(wasGrounded)p.coyoteMoverVy=support?.vy||0;
   if(wasGrounded&&support?.kind){p.x+=support.dx;p.y+=support.dy;}
   p.coyote=wasGrounded?TUNE.coyote:Math.max(0,p.coyote-dt);
   p.buffer=input.jumpPressed?TUNE.buffer:Math.max(0,p.buffer-dt);
@@ -52,8 +87,8 @@ export function step(w,input={},dt=DT) {
   if(wasGrounded&&p.slope){p.vx+=p.slope*TUNE.slopeGravity*dt;}
   if(wasGrounded&&support?.speed){p.vx=approach(p.vx,(dir?dir*TUNE.runSpeed:0)+support.speed,2100*dt);}
   if(p.buffer>0){
-    if(p.coyote>0)jump(w,p.vx+(support?.vx||0),-TUNE.jump+Math.min(0,support?.vy||0));
-    else if(p.wall){jump(w,-p.wall*Math.max(TUNE.wallKick,Math.abs(p.vx)*0.8),-TUNE.jump*0.93);p.wallLock=0.13;}
+    if(p.coyote>0){jump(w,p.vx+(support?.vx||0),-TUNE.jump+Math.min(0,p.coyoteMoverVy));jumped=true;}
+    else if(p.wall){jump(w,-p.wall*Math.max(TUNE.wallKick,Math.abs(p.vx)*0.8),-TUNE.jump*0.93);p.wallLock=0.13;jumped=true;}
   }
   if((input.jumpReleased||p.cutBuffered)&&p.vy<0){p.vy*=TUNE.jumpCut;p.cutBuffered=false;}
   p.vy+=TUNE.gravity*dt;
@@ -96,6 +131,7 @@ export function step(w,input={},dt=DT) {
   }
   // Stable wall contact when the previous collision removed horizontal velocity.
   for(const b of blocks)if(p.y+p.h>b.y+2&&p.y<b.y+b.h-2){if(Math.abs(p.x+p.w-b.x)<0.1)p.wall=1;if(Math.abs(p.x-b.x-b.w)<0.1)p.wall=-1;}
+  if(p.wall&&approachSpeed>180)p.ledgeCooldown=.25;
   if(!p.grounded&&p.wall&&p.vy>TUNE.wallFall&&dir===p.wall)p.vy=TUNE.wallFall;
   // A rising platform presses into the player; lift them onto its top, then detect crushing.
   for(const m of w.machines)if(overlap(p,m)&&m.dy<0){p.y=m.y-p.h;p.vy=Math.min(0,p.vy);p.grounded=true;p.groundId=m.id;}
@@ -110,7 +146,19 @@ export function step(w,input={},dt=DT) {
     if(correction.axis==='x')p.vx=0;else {p.vy=0;if(correction.d<0){p.grounded=true;p.groundId=trapped.id;}}
   }
   if(p.y>level.height+80){die(w,'Fell outside the lab','Land on the lower recovery floor or press R to retry.','bounds');return;}
-  if(!w.parcel&&overlap(p,level.parcel)){w.parcel=true;w.events.push('pickup');}
-  if(w.parcel&&overlap(p,level.delivery)){w.status='complete';w.events.push('complete');}
+  // Walking off a machine inherits its motion once, just like a deliberate jump.
+  if(wasGrounded&&support?.kind&&!p.grounded&&!jumped){p.vx+=support.vx;p.vy+=support.vy;}
+  // Catch only a slow, descending approach to a static edge. Jump and slide win.
+  if(!p.grounded&&p.wall&&dir===p.wall&&p.vy>=0&&p.vy<260&&approachSpeed<=180&&p.ledgeCooldown===0&&p.wallLock===0&&p.buffer===0&&!input.down&&p.h===TUNE.height){
+    const b=level.solids.find(b=>Math.abs(p.y+8-b.y)<=10&&(p.wall===1?Math.abs(p.x+p.w-b.x)<.1:Math.abs(p.x-b.x-b.w)<.1));
+    if(b){
+      const hang={...p,y:b.y-8},top={...p,x:p.wall===1?b.x+2:b.x+b.w-p.w-2,y:b.y-p.h};
+      if(clearPose(hang,blocks,level.hazards)&&clearPose(top,blocks,level.hazards)){
+        p.y=hang.y;p.ledge={id:b.id,side:p.wall,x:p.x,y:p.y,held:0,phase:'hang',time:0};p.vx=0;p.vy=0;w.events.push('grab');
+      }
+    }
+  }
+  objectives(w);
   p.state=p.grounded?(p.h<TUNE.height?'slide':Math.abs(p.vx)>10?'run':'idle'):p.wall&&p.vy>0?'wall slide':p.vy<0?'rise':'fall';
+  if(p.ledge)p.state='ledge hang';
 }

@@ -1,5 +1,5 @@
 import {lab} from '../src/level.js';
-import {createWorld,step,DT} from '../src/physics.js';
+import {createWorld,step,reset,DT} from '../src/physics.js';
 import {createRenderer} from '../src/render.js';
 import {standardRoute,wallRoute,withJumpReleases} from './routes.js';
 const $=id=>document.getElementById(id),render=createRenderer($('game'));
@@ -17,8 +17,14 @@ function tick(){
   $('status').textContent=`${name}: ${w.status.toUpperCase()} | ${w.time.toFixed(3)}s | x ${Math.round(w.p.x)} y ${Math.round(w.p.y)} | ${w.p.state}${w.failure?' | '+w.failure.cause:''}`;
   if(w.status==='complete'){$('status').textContent+= ' | PARCEL DELIVERED — NO WARP';playing=false;}
   if(w.status==='dead')playing=false;
+  if(name==='Ledge check'&&w.p.groundId==='ledge-practice'){$('status').textContent+=' | LEDGE CHECK PASSED';playing=false;driver=null;}
   $('checkpoints').textContent=checkpoints.join('\n');
 }
 $('lower').onclick=()=>start(standardRoute,'Lower route');$('wall').onclick=()=>start(wallRoute,'Wall route');$('pause').onclick=()=>{playing=!playing;acc=0;};$('tick').onclick=()=>{playing=false;for(let i=0;i<30;i++)tick();};
+$('ledge').onclick=()=>{
+  let tick=0,hang=0;
+  start(()=>world=>{const p=world.p;tick++;if(p.ledge&&hang++<36)return {};return {right:p.x<2300||p.wall===1,jumpPressed:tick===1};},'Ledge check');
+  reset(w,7);
+};
 function frame(now){const elapsed=last?Math.min((now-last)/1000,.1):0;last=now;if(playing){acc+=elapsed;while(acc>=DT){tick();acc-=DT;}}render(w,{debug:true,reducedMotion:true,elapsed,resetCamera:snap});snap=false;requestAnimationFrame(frame);}
 requestAnimationFrame(frame);

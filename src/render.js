@@ -47,10 +47,12 @@ export function createRenderer(canvas){
       const stride=p.grounded&&Math.abs(p.vx)>20?Math.sin(w.time*24)*3:0;
       rect(p.x+2,p.y+p.h-6,8,6+stride,'#e9efe8');rect(p.x+14,p.y+p.h-6,8,6-stride,'#e9efe8');
       if(w.parcel){rect(p.x+(p.facing>0?-7:20),p.y+12,11,14,'#df9361');}
+      if(p.ledge){rect(p.x+(p.ledge.side>0?p.w-2:-4),p.y+5,6,5,'#f5c66b');}
     }else {text(w.failure?.cause||'RETRY',p.x-45,p.y-20,16,'#f1a184');ctx.strokeStyle='#f1a184';ctx.lineWidth=3;ctx.strokeRect(p.x-5,p.y-5,p.w+10,p.h+10);}
     if(debug){ctx.strokeStyle='#8fffaa';ctx.strokeRect(p.x,p.y,p.w,p.h);ctx.beginPath();ctx.moveTo(p.x+12,p.y+18);ctx.lineTo(p.x+12+p.vx*.18,p.y+18+p.vy*.18);ctx.stroke();}
     ctx.restore();
-    rect(20,20,250,50,'#152831dd');text(w.practice?'PRACTICE / RECORDS OFF':w.parcel?'PARCEL SECURED → DELIVERY BAY':'COLLECT THE PARCEL →',34,41,12,'#f3cc85');text(w.started?'1–7: jump to a lab station':'A / D TO START · SPACE TO JUMP',34,59,10);
+    rect(20,20,250,50,'#152831dd');text(w.practice?'PRACTICE / RECORDS OFF':w.parcel?'PARCEL SECURED → DELIVERY BAY':'COLLECT THE PARCEL →',34,41,12,'#f3cc85');text(w.started?'1–8: jump to a lab station':'A / D TO START · SPACE TO JUMP',34,59,10);
+    if(p.ledge){rect(W/2-225,H-64,450,42,'#152831ef');text('HOLD TOWARD EDGE: CLIMB   /   S: DROP   /   SPACE: KICK',W/2-207,H-39,11,'#f3cc85');}
     if(debug){rect(20,85,285,132,'#11232beF');const lines=[`${p.state.toUpperCase()} | ${w.status}`,`x ${p.x.toFixed(1)}  y ${p.y.toFixed(1)}`,`vx ${p.vx.toFixed(1)}  vy ${p.vy.toFixed(1)}`,`ground ${p.groundId||'—'}  wall ${p.wall}`,`coyote ${p.coyote.toFixed(3)}  buffer ${p.buffer.toFixed(3)}`,`120 Hz | physics ${TUNE.runSpeed} run cap`];lines.forEach((s,i)=>text(s,32,106+i*19,12,'#b8dcc6','monospace'));}
     // Direction marker remains readable when the destination is outside the camera.
     if(d.x>camera.x+W-60)text('DELIVERY ↗',W-125,38,12,'#b8e6b7');
