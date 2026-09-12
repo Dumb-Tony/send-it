@@ -58,4 +58,4 @@ Initial test findings fixed: conveyor and piston practice spawns overlapped thei
 5. Exercise result/personal-best persistence and denied storage end-to-end in the browser; test Chrome/Edge/Firefox independently.
 6. Tune rank thresholds from actual runs. Current 45/30/22-second values are placeholders.
 
-No campaign, final art, package modifiers, global leaderboard, GitHub remote or public deployment is included in this first local build. The next production milestone is the 12-delivery Street Level + Construction slice, after the movement gate passes.
+Public publishing is handled by the Pages workflow in Dumb-Tony/send-it, with the play URL https://dumb-tony.github.io/send-it/. The initial local-only handoff has been superseded by the user's standing public-repository and public-link rule. The campaign, final art, package modifiers and global leaderboard remain future work. The next production milestone is the 12-delivery Street Level + Construction slice, after the movement gate passes.

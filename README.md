@@ -2,6 +2,10 @@
 
 A momentum courier platformer. **If there's an address, we deliver.**
 
+**[Play SEND IT](https://dumb-tony.github.io/send-it/)** · [Public source repository](https://github.com/Dumb-Tony/send-it)
+
+The public game is hosted on GitHub Pages and works without a local server. Share that play link with friends. Desktop keyboard controls are required; Brave is expected to work, but has not yet been separately certified.
+
 This is the first **Milestone 1 movement laboratory**, not the finished campaign. Run, jump, wall-kick, slide, build slope/conveyor speed, ride lifts, and launch from a piston. Collect the parcel and reach the green delivery bay. A lower floor supports recovery and route experiments.
 
 **Build 03:** keeps the accepted movement tuning and adds slow static ledge catches, climbing, dropping and kick-offs. Walking off a moving platform now retains its motion. The ramp and wall fixes from Build 02 remain covered by full-route regressions.
@@ -39,6 +43,6 @@ The timer starts with movement. Death retries after 350 ms. Personal bests are s
 node --test tests/*.test.mjs
 ```
 
-See [implementation GDD](docs/IMPLEMENTATION_GDD.md), [milestone status](docs/MILESTONE_1.md), and [playtest protocol](docs/PLAYTEST.md). Physics is independent of Canvas and DOM; no build step is required. Static asset URLs are relative for eventual GitHub Pages hosting. No remote is configured by this scaffold.
+See [implementation GDD](docs/IMPLEMENTATION_GDD.md), [milestone status](docs/MILESTONE_1.md), and [playtest protocol](docs/PLAYTEST.md). Physics is independent of Canvas and DOM; no local build step is required. Every push to main runs the regression suite and publishes the game through the GitHub Pages workflow. Only game files enter the deployment artifact.
 
 For repeatable visual verification, open `/tests/playtest.html` on the running server. Its lower and wall routes use ordinary inputs through the same simulation and renderer; they never warp or save records. Pause and advance in quarter-second steps to inspect problem areas.
