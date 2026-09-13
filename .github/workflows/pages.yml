@@ -23,11 +23,7 @@ jobs:
       - name: Test movement and complete routes
         run: node --test tests/*.test.mjs
       - name: Package the playable game
-        run: |
-          mkdir -p public
-          cp index.html style.css public/
-          cp -R src public/src
-          touch public/.nojekyll
+        run: node scripts/package.mjs
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public
