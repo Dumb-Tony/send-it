@@ -22,3 +22,7 @@ Run all 43 headless tests, then open `tests/playtest.html` on a development serv
 Open `tests/session.html` and click the first-two-deliveries replay. It uses ordinary DOM key events at real speed through the actual game page. Verify PASSED for results, next delivery, third-job unlock and progress after reload. This test saves earned progress on the development origin, never by granting records. Keep these test pages outside the public deployment artifact.
 
 On the playable page, check dispatch selection, keyboard jump/pause/retry, playground access and practice controls. Browser input replays are automated verification, not human feel testing. Cross-browser certification remains outstanding.
+
+### Build 09 rounded cartoon regression
+
+All 43 simulation tests passed. Browser pose review covered idle, run, braking, rising/falling, sliding, wall slide and hanging at enlarged and gameplay scales. Browser input replays completed Construction Air Mail (5.267s), Skyline (10.042s), and Street shutter route (4.100s). These are automated replays, not manual feel testing. Street, Construction and Skyline artwork was visually inspected; route browser reported no errors. No physics or level geometry files changed.

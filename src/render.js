@@ -1,5 +1,6 @@
 import { TUNE } from './physics.js';
-import {material,surfaceLight,insetShadow} from './materials.js';
+import {roundedPanel} from './toon.js';
+import {platformArt} from './platform-art.js';
 import {drawCourier,drawBay} from './art.js';
 import {cityBackdrop} from './district-art.js';
 import {fanHousing,beltArt,moverArt} from './machine-art.js';
@@ -34,14 +35,7 @@ export function createRenderer(canvas){
       for(let i=0;i<14;i++){const x=f.x+12+(i*43)%(f.w-24),y=f.y+((i*61-w.time*165)%f.h+f.h)%f.h;text('↑',x,y,23,'#216e7aa0');}
       rect(f.x,f.y+f.h-8,f.w,8,'#267f87');
     }
-    for(const b of w.level.solids){rect(b.x,b.y,b.w,b.h,'#293f43');rect(b.x+2,b.y+5,b.w-4,b.h-5,construction?'#937a61':'#8d7864');rect(b.x,b.y,b.w,5,'#fff0ca');rect(b.x,b.y+5,b.w,4,'#bba17f');
-      if(b.id==='floor'){rect(b.x,b.y+15,b.w,7,'#3b504c');rect(b.x,b.y+22,b.w,b.h-22,'#425752');for(let x=0;x<b.w;x+=90){rect(x,b.y+8,2,7,'#6d6c58');rect(x+20,b.y+68,38,3,'#738173');}}
-      const finish=b.id==='floor'?'asphalt':b.id==='shutter'?'metal':['scaffold','mid-deck'].includes(b.id)?'wood':b.id==='awning'?'fabric':['wall-a','wall-b'].includes(b.id)?'brick':'concrete';
-      material(ctx,b.x+2,b.y+9,b.w-4,b.h-11,finish,finish==='asphalt'?.5:1);surfaceLight(ctx,b.x+2,b.y+9,b.w-4,b.h-11,.25);insetShadow(ctx,b.x+2,b.y+9,b.w-4,b.h-11,8);
-      if(campaign&&b.id==='shutter'){rect(b.x+3,b.y+9,b.w-6,b.h-12,'#6388a0');for(let y=b.y+12;y<b.y+b.h;y+=12)rect(b.x+5,y,b.w-10,2,'#aac7ce');material(ctx,b.x+3,b.y+9,b.w-6,b.h-12,'metal');text('CLOSING TIME',b.x+45,b.y+54,18,'#fff0b5');}
-      if(['wall-a','wall-b'].includes(b.id)){rect(b.x+7,b.y+14,b.w-14,b.h-22,'#6e91a7');for(let y=b.y+24;y<b.y+b.h-18;y+=48){rect(b.x+13,y,b.w-26,25,'#b5d5d6');rect(b.x+10,y+25,b.w-20,4,'#365b72');}}
-      if(['awning','mid-deck','scaffold'].includes(b.id)){for(let x=b.x+3;x<b.x+b.w-10;x+=24)rect(x,b.y+9,12,b.h-11,construction?'#e8c079':'#d37b69');}
-    }
+    for(const b of w.level.solids)platformArt(ctx,b,construction);
     for(const s of w.level.slopes){ctx.fillStyle='#53666c';ctx.beginPath();ctx.moveTo(s.x,s.y1);ctx.lineTo(s.x+s.w,s.y2);ctx.lineTo(s.x+s.w,870);ctx.lineTo(s.x,870);ctx.closePath();ctx.fill();ctx.strokeStyle='#c2cecb';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(s.x,s.y1);ctx.lineTo(s.x+s.w,s.y2);ctx.stroke();}
     for(const c of w.level.conveyors)beltArt(ctx,c,w.time);
     for(const m of w.machines)moverArt(ctx,m,w.level.movers.find(s=>s.id===m.id));
@@ -51,7 +45,7 @@ export function createRenderer(canvas){
     text(campaign?'SEND IT COURIER CO.  /  NO ADDRESS TOO UNREASONABLE':'RECOVERY FLOOR  /  A FALL CAN BE A NEW ROUTE',campaign?65:1180,945,16,'#a6b8bb');
     const d=w.level.delivery;
     drawBay(ctx,d,w.parcel,animationTime);
-    if(!w.parcel){const q=w.level.parcel;rect(q.x,q.y,q.w,q.h,'#f3c77a');rect(q.x+9,q.y,4,q.h,'#b2894d');text('PICK UP',q.x-12,q.y-17,10,'#f3c77a');}
+    if(!w.parcel){const q=w.level.parcel;roundedPanel(ctx,q.x,q.y,q.w,q.h,'#ffcc65',5);roundedPanel(ctx,q.x+9,q.y,4,q.h,'#fff2bd',1);text('PICK UP',q.x-12,q.y-17,10,'#f3c77a');}
     if(resetCamera)trail=[];
     if(!reducedMotion&&Math.abs(p.vx)>420&&w.status==='running'){trail.push({x:p.x,y:p.y,h:p.h});if(trail.length>8)trail.shift();}else trail.shift();
     trail.forEach((v,i)=>{ctx.globalAlpha=i/trail.length*.18;rect(v.x,v.y,p.w,v.h,'#f5c66b');});ctx.globalAlpha=1;

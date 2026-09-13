@@ -1,8 +1,9 @@
 import {material,surfaceLight} from './materials.js';
+import {roundedPanel} from './toon.js';
 const ink='#2d4c60';
-function box(c,x,y,w,h,col,r=0){c.fillStyle=col;c.beginPath();c.roundRect(x,y,w,h,r);c.fill();}
+function box(c,x,y,w,h,col,r=0){roundedPanel(c,x,y,w,h,col,Math.max(r,Math.min(10,h*.3)));}
 function line(c,x,y,xx,yy,col,width=2){c.strokeStyle=col;c.lineWidth=width;c.beginPath();c.moveTo(x,y);c.lineTo(xx,yy);c.stroke();}
-function bolt(c,x,y){c.fillStyle='#fff2be';c.beginPath();c.arc(x,y,2,0,Math.PI*2);c.fill();}
+function bolt(c,x,y){c.fillStyle='#203d59';c.beginPath();c.arc(x,y,3.5,0,Math.PI*2);c.fill();c.fillStyle='#fff2be';c.beginPath();c.arc(x-.5,y-.5,2,0,Math.PI*2);c.fill();}
 export function fanHousing(c,f,time){
   const y=f.y+f.h;box(c,f.x,y+4,f.w,48,ink,5);box(c,f.x+4,y+8,f.w-8,40,'#4aa2b4',4);
   material(c,f.x+4,y+8,f.w-8,40,'metal');surfaceLight(c,f.x+4,y+8,f.w-8,40,.35);

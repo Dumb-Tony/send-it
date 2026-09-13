@@ -53,3 +53,13 @@ All assets are original, editable Canvas code authored for SEND IT in this proje
 ## Verification
 
 All 43 existing regressions pass. Browser checks cover street, construction and skyline input replays, clean gameplay without telemetry, district contrast, console errors and the slow ledge check. These are automated replays plus visual inspection, not a claim of human feel testing or certification in every browser.
+
+## Build 09 — rounded cartoon direction
+
+The user's style reference is Subway Surfers: bold, cartoony, rounded. It is a broad shape and shading reference, not a character or asset copy (official reference: https://subwaysurfers.com/). SEND IT retains its courier helmet, work jacket, scarf and messenger bag.
+
+Courier: larger domed helmet and three-quarter face, two large eyes, full cheeks, chunky sleeves/trousers, cream gloves and oversized trainers. Soft directional gradients give volume while the light silhouette edge separates him from the city. Existing state-driven poses remain.
+
+Level: shared rounded-panel rendering, cream-framed rounded windows, pill-shaped shop signs, shaded vehicles/planters, softer city surfaces, rounded machinery housings, and distinct wood/fabric/metal/brick patterns at lower visual noise. Walkable platform tops retain their exact collision positions. District identity and existing movement/geometry are preserved.
+
+Source: original Canvas vector artwork in courier.js, toon.js and platform-art.js, with matching updates to the district, city-life, machinery and recipient artwork. No third-party assets were copied.

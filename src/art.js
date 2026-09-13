@@ -1,7 +1,8 @@
+import {roundedPanel} from './toon.js';
 import {resident} from './city-life.js';
 import {material,insetShadow} from './materials.js';
 // Presentation only. Every walkable edge still comes from the level's collision data.
-function box(c,x,y,w,h,color,r=0){c.fillStyle=color;c.beginPath();c.roundRect(x,y,w,h,r);c.fill();}
+function box(c,x,y,w,h,color,r=0){roundedPanel(c,x,y,w,h,color,Math.max(r,8));}
 function circle(c,x,y,r,color){c.fillStyle=color;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill();}
 export {drawCourier} from './courier.js';
 export function drawBay(c,d,parcel,time=0){

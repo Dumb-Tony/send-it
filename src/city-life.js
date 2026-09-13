@@ -1,8 +1,9 @@
 // Decorative residents and props sit behind the collision layer.
+import {roundedPanel} from './toon.js';
 const dark='#34505b';
-function rect(c,x,y,w,h,color,r=0){c.fillStyle=color;c.beginPath();c.roundRect(x,y,w,h,r);c.fill();}
+function rect(c,x,y,w,h,color,r=0){roundedPanel(c,x,y,w,h,color,Math.max(r,Math.min(9,h*.25)));}
 function line(c,x,y,xx,yy,color,width=2){c.strokeStyle=color;c.lineWidth=width;c.lineCap='round';c.beginPath();c.moveTo(x,y);c.lineTo(xx,yy);c.stroke();}
-function dot(c,x,y,r,color){c.fillStyle=color;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill();}
+function dot(c,x,y,r,color){c.fillStyle=color;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill();if(r>5){const g=c.createRadialGradient(x-r*.3,y-r*.4,0,x,y,r);g.addColorStop(0,'#fff6ca35');g.addColorStop(.6,'#ffffff00');g.addColorStop(1,'#213b552b');c.fillStyle=g;c.fill();}}
 export function resident(c,x,y,time,kind='watch',scale=1){
   c.save();c.translate(x,y);c.scale(scale,scale);
   const wave=Math.sin(time*2.4),shirt=kind==='worker'?'#edb94b':kind==='water'?'#699ab1':'#c97878';
