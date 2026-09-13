@@ -2,6 +2,8 @@
 
 A momentum courier platformer. **If there's an address, we deliver.**
 
+**Build 05 / Special Delivery — visual pass:** warm paper dispatch slips, postal stripes and stamped branding; illustrated shopfronts and layered city scenery; a rounded helmet-and-scarf courier; solid-edged brick platforms, recipient doors and stronger fan markings. Movement, collision geometry, campaign progression and saved records are unchanged.
+
 **[Play SEND IT](https://dumb-tony.github.io/send-it/)** · [Public source repository](https://github.com/Dumb-Tony/send-it)
 
 The public game is hosted on GitHub Pages and works without a local server. Share that play link with friends. Desktop keyboard controls are required; Brave is expected to work, but has not yet been separately certified.
