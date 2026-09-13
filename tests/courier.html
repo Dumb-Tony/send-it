@@ -1,0 +1,13 @@
+<!doctype html><meta charset="utf-8"><title>SEND IT / Courier pose review</title>
+<style>body{background:#172a40;color:#fff3d8;font:14px Arial;margin:20px}canvas{width:100%;max-width:1280px}button{padding:10px;margin:10px}</style>
+<h1>Courier pose review — same drawing as the game</h1><button id="pause">Pause / resume</button><canvas id="poses" width="1280" height="680"></canvas>
+<script type="module">
+import {drawCourier} from '../src/courier.js';
+const c=document.getElementById('poses').getContext('2d');let time=0,last=0,paused=false;
+document.getElementById('pause').onclick=()=>paused=!paused;
+const base={x:0,y:0,w:24,h:36,facing:1,vx:0,vy:0,grounded:true,state:'idle'};
+const poses=[['IDLE / BLINK',{}],['RUN',{vx:390}],['BRAKE',{vx:-250}],['RISE',{grounded:false,vy:-400}],['FALL',{grounded:false,vy:500}],['SLIDE',{h:22,vx:500,state:'slide'}],['WALL',{grounded:false,vy:80,state:'wall slide'}],['HANG',{grounded:false,ledge:{side:1},state:'ledge hang'}]];
+function frame(now){if(!paused)time+=last?Math.min(.1,(now-last)/1000):0;last=now;c.clearRect(0,0,1280,680);
+poses.forEach(([name,p],i)=>{const x=i%4*320,y=Math.floor(i/4)*340;c.fillStyle=['#dda18b','#8aabad','#cfb78a','#9b96ae'][i%4];c.fillRect(x+8,y+8,304,324);c.fillStyle='#172a40';c.font='bold 15px Arial';c.fillText(name,x+25,y+35);c.save();c.translate(x+120,y+65);c.scale(4,4);drawCourier(c,{...base,...p},time,i%2===0);c.restore();c.fillStyle='#314d59';c.fillRect(x+15,y+285,290,5);c.save();c.translate(x+145,y+249);drawCourier(c,{...base,...p},time,i%2===0);c.restore();c.font='11px Arial';c.fillText('ACTUAL GAME SCALE',x+25,y+310);});requestAnimationFrame(frame);}
+requestAnimationFrame(frame);
+</script>

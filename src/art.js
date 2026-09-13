@@ -1,33 +1,9 @@
 import {resident} from './city-life.js';
-import {material,surfaceLight,insetShadow} from './materials.js';
+import {material,insetShadow} from './materials.js';
 // Presentation only. Every walkable edge still comes from the level's collision data.
-const ink='#263c40';
 function box(c,x,y,w,h,color,r=0){c.fillStyle=color;c.beginPath();c.roundRect(x,y,w,h,r);c.fill();}
-function line(c,x,y,x2,y2,color=ink,width=2){c.strokeStyle=color;c.lineWidth=width;c.beginPath();c.moveTo(x,y);c.lineTo(x2,y2);c.stroke();}
 function circle(c,x,y,r,color){c.fillStyle=color;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill();}
-export function drawCourier(c,p,time,parcel){
-  c.save();c.translate(p.x+p.w/2,p.y);c.scale(p.facing,1);
-  const crouch=p.h<30,running=p.grounded&&Math.abs(p.vx)>25,hanging=!!p.ledge,wall=p.state==='wall slide';
-  const stride=running?Math.sin(time*25)*5:0,lean=running?Math.min(.25,Math.abs(p.vx)/2400):crouch?.2:0;
-  const bob=running?Math.abs(Math.sin(time*25))*1.6:!p.grounded?0:Math.sin(time*3)*.65;
-  c.translate(0,-bob);c.transform(1,0,-lean,1,lean*p.h,0);
-  // The Rookie: scuffed cream helmet, orange work jacket, teal messenger bag.
-  box(c,-14,12,9,crouch?8:14,ink,3);box(c,-13,13,7,crouch?6:11,'#3f8182',2);line(c,-12,16,-7,16,'#91b2a0',1);material(c,-13,13,7,crouch?6:11,'fabric',.5);
-  if(parcel){box(c,-21,12,10,crouch?10:15,'#263c40',2);box(c,-20,12,9,crouch?8:13,'#ce954e',1);box(c,-17,12,2,crouch?8:13,'#ffe1a1');line(c,-20,16,-12,16,'#ad753e',.7);}
-  const head=crouch?0:1,body=crouch?10:13;
-  box(c,-9,body-1,19,crouch?9:16,ink,5);box(c,-7,body,15,crouch?6:12,'#f27545',4);box(c,-6,body+3,4,4,'#ffd771',1);
-  surfaceLight(c,-7,body,15,crouch?6:12,.35);material(c,-7,body+2,15,crouch?4:10,'fabric',.4);line(c,2,body+2,1,body+(crouch?6:11),'#8e4c3f',1);line(c,-6,body+2,7,body+10,'#244d57',2);box(c,3,body+3,4,4,'#fff0c8',.5);line(c,4,body+6,6,body+4,'#dc794c',.8);
-  box(c,-7,head+4,15,10,'#f3c19b',4);box(c,-10,head,20,8,'#fff7df',5);box(c,4,head+5,9,3,'#fff7df',2);box(c,-1,head,4,7,'#e66c4a');circle(c,6,head+9,1.6,ink);
-  box(c,-8,head+5,4,6,'#694e46',2);circle(c,-3,head+10,2.3,'#e3a07d');line(c,-9,head+6,3,head+7,'#a7aba0',1);line(c,-7,head+2,-3,head+1,'#fffdf0',1.2);line(c,5,head+7,8,head+7,'#714a39',1);line(c,5,head+12,8,head+12,'#9f5c47',.7);line(c,-3,head+11,0,head+14,'#4a6260',1);
-  box(c,-9,head+13,17,4,'#e7b943',2);line(c,-8,head+15,-17-Math.min(9,Math.abs(p.vx)*.02),head+10,'#e7b943',3);
-  const armY=hanging?5:wall?10:!p.grounded?(p.vy<0?9:4):body+9+stride*.5;
-  line(c,-3,body+4,10,armY,ink,5);line(c,-3,body+4,10,armY,'#f0b087',3);
-  const feet=p.h-3,air=!p.grounded&&!hanging,frontY=air?feet-5:feet,backY=hanging?feet:air?feet-9:feet;
-  line(c,-4,body+12,-5+stride,backY,ink,5);line(c,5,body+12,6-stride,frontY,ink,5);
-  box(c,-10+stride,backY-1,11,5,ink,2);box(c,1-stride,frontY-1,13,5,ink,2);box(c,-9+stride,backY-1,10,3,'#fff5dc',2);box(c,2-stride,frontY-1,11,3,'#fff5dc',2);
-  line(c,4-stride,frontY,7-stride,frontY,'#d7774d',1);line(c,-7+stride,backY,-4+stride,backY,'#d7774d',1);
-  c.restore();
-}
+export {drawCourier} from './courier.js';
 export function drawBay(c,d,parcel,time=0){
   box(c,d.x-5,d.y-5,d.w+10,d.h+5,'#263c40',6);box(c,d.x,d.y,d.w,d.h,'#518b71',3);
   box(c,d.x+8,d.y+8,d.w-16,d.h-8,'#204f48',3);box(c,d.x+14,d.y+33,d.w-28,d.h-39,'#a6ce9b30',2);

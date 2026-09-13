@@ -1,5 +1,13 @@
 # SEND IT — art direction, Build 06
 
+## Build 08 — courier only
+
+The user explicitly requested focus on the courier, one thing at a time. No environment art, materials, level content or physics changed. `src/courier.js` replaces the former box-based figure with an articulated vector character shared by gameplay and the existing employee portrait.
+
+Silhouette: swept cream messenger helmet, dark navy contour with a narrow cream separation rim, blue satchel, orange curved jacket, scarf and oversized sneakers. Face: nose/chin/ear profile, white eye with pupil, eyebrow, grin and open-mouth fall expression. Poses: planted breathing/blinking idle; pumping elbows and bent-knee run; backward skid lean; rising and falling reach; crouched slide; wall brace; ledge grip with dangling legs; short landing compression; delivery fist raised. Animation never changes the collider or simulation values.
+
+`tests/courier.html` is a local-only pose review displaying eight states enlarged and at gameplay scale against multiple background colors. Existing browser route/ledge replays and the 43 simulation regressions remain the verification path. No new gameplay feature is included in this release.
+
 ## Build 07 — character, lighting and materials
 
 The next user-requested pass adds material differences and lighting rather than more level content. The courier is defined as **The Rookie**: cream helmet with stripe/scuffs and chin strap, orange fabric jacket with diagonal messenger strap and small company patch, teal bag, taped cardboard parcel and worn cream trainers. The dispatch portrait uses the same editable character drawing as gameplay.

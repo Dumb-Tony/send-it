@@ -4,13 +4,15 @@ import {drawCourier,drawBay} from './art.js';
 import {cityBackdrop} from './district-art.js';
 import {fanHousing,beltArt,moverArt} from './machine-art.js';
 export function createRenderer(canvas){
-  const ctx=canvas.getContext('2d');let camera={x:0,y:380},trail=[],artTime=0,particles=[],previous={};
+  const ctx=canvas.getContext('2d');let camera={x:0,y:380},trail=[],artTime=0,particles=[],previous={},landingPose=0;
   function rect(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(x,y,w,h);}
   function text(value,x,y,size=12,color='#adc0c7',font='Arial'){ctx.fillStyle=color;ctx.font=`${size}px ${font}`;ctx.fillText(value,x,y);}
   function stripes(x,y,w,h){ctx.save();ctx.beginPath();ctx.rect(x,y,w,h);ctx.clip();rect(x,y,w,h,'#ed896c');ctx.strokeStyle='#533f3b';ctx.lineWidth=7;for(let i=-h;i<w;i+=20){ctx.beginPath();ctx.moveTo(x+i,y+h);ctx.lineTo(x+i+h,y);ctx.stroke();}ctx.restore();}
   return function render(w,{debug=false,reducedMotion=false,elapsed=0,resetCamera=false}={}){
     const p=w.p,W=canvas.width,H=canvas.height;
-    if(resetCamera){particles=[];previous={};}
+    if(resetCamera){particles=[];previous={};landingPose=0;}
+    landingPose=Math.max(0,landingPose-elapsed);
+    if(p.grounded&&previous.grounded===false&&w.started)landingPose=.14;
     if(!reducedMotion){
       const pickup=w.parcel&&!previous.parcel,landing=p.grounded&&previous.grounded===false&&w.started,death=w.status==='dead'&&previous.status!=='dead';
       if(pickup||landing||death){const n=death?12:pickup?9:5;for(let i=0;i<n;i++){const a=i/n*Math.PI*2;particles.push({x:p.x+p.w/2,y:p.y+(landing?p.h:12),vx:Math.cos(a)*(pickup?95:60),vy:-45+Math.sin(a)*65,life:.45,max:.45,color:death?'#ed805e':pickup?'#ffda72':'#fff0cd'});}}
@@ -57,7 +59,7 @@ export function createRenderer(canvas){
       const feet=p.y+p.h,cx=p.x+p.w/2;
       const support=[...w.level.solids,...w.level.conveyors,...w.machines].filter(b=>b.y>=feet-2&&cx>=b.x&&cx<=b.x+b.w).sort((a,b)=>a.y-b.y)[0];
       if(support){const gap=Math.max(0,support.y-feet);if(gap<320){const x=Math.max(support.x+3,Math.min(support.x+support.w-3,cx-gap*.2));ctx.save();ctx.beginPath();ctx.rect(support.x,support.y,support.w,support.h);ctx.clip();ctx.fillStyle=`rgba(20,32,48,${.34/(1+gap/130)})`;ctx.beginPath();ctx.ellipse(x,support.y+2,Math.max(6,15-gap*.022),3.5,0,0,Math.PI*2);ctx.fill();ctx.restore();}}
-      drawCourier(ctx,p,artTime,w.parcel);
+      drawCourier(ctx,p,artTime,w.parcel,{landing:landingPose/.14,reducedMotion,delivered:w.status==='complete'});
     }else {text(w.failure?.cause||'RETRY',p.x-45,p.y-20,16,'#f1a184');ctx.strokeStyle='#f1a184';ctx.lineWidth=3;ctx.strokeRect(p.x-5,p.y-5,p.w+10,p.h+10);}
     for(const v of particles){ctx.globalAlpha=Math.max(0,v.life/v.max);rect(v.x-2,v.y-2,4,4,v.color);}ctx.globalAlpha=1;
     if(debug){ctx.strokeStyle='#8fffaa';ctx.strokeRect(p.x,p.y,p.w,p.h);ctx.beginPath();ctx.moveTo(p.x+12,p.y+18);ctx.lineTo(p.x+12+p.vx*.18,p.y+18+p.vy*.18);ctx.stroke();}

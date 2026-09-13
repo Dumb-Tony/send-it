@@ -2,6 +2,8 @@
 
 A momentum courier platformer. **If there's an address, we deliver.**
 
+**Build 08 — courier focus:** rebuilt character silhouette and expressive face, navy/cream outline for background separation, articulated running/jumping/sliding poses, blinking idle, landing compression and delivery celebration. The city and gameplay are unchanged.
+
 **Build 07 / The Rookie:** a more defined courier and portrait, distinct brick/concrete/stucco/metal/wood/fabric/asphalt materials, reflective glass, directional surface lighting, architectural shadows and a courier contact shadow. The update preserves gameplay and saved progress.
 
 **Build 06 / City in Motion:** follows the original concept's illustrated urban-cartoon direction with distinct Street/Construction/Skyline scenery, residents and pigeons, expressive courier poses, functional-looking animated machinery and short movement effects. See [art direction and source notes](docs/ART_DIRECTION.md). Gameplay and existing progress are unchanged.
