@@ -1,6 +1,8 @@
 # SEND IT — Implementation Game Design Document
 
-Version 0.3 • 12 September 2026 • Working implementation specification
+Version 0.4 • 13 September 2026 • Working implementation specification
+
+Build status: the user approved the improved movement and requested full-game development. **First Shift**, the initial six-delivery campaign alpha, is now implemented with local progression, medals and a dispatch board; see [Milestone 2](MILESTONE_2.md). Five new courses lead into a capstone that reuses the lab geometry. The original 12-delivery slice remains the next content target; the full-game systems below remain specifications unless explicitly marked implemented. Accepted movement constants are unchanged.
 
 **A momentum platformer about getting a package where it absolutely should not be possible to deliver.**
 

@@ -6,9 +6,9 @@ A momentum courier platformer. **If there's an address, we deliver.**
 
 The public game is hosted on GitHub Pages and works without a local server. Share that play link with friends. Desktop keyboard controls are required; Brave is expected to work, but has not yet been separately certified.
 
-This is the first **Milestone 1 movement laboratory**, not the finished campaign. Run, jump, wall-kick, slide, build slope/conveyor speed, ride lifts, and launch from a piston. Collect the parcel and reach the green delivery bay. A lower floor supports recovery and route experiments.
+**Build 04 / First Shift** is the first campaign alpha: six short deliveries across Street Level, Construction and the Skyline, with an unlockable dispatch board, recipient messages, local medals and personal bests. Five introductory courses lead into a capstone using the original lab course. The movement playground remains available separately.
 
-**Build 03:** keeps the accepted movement tuning and adds slow static ledge catches, climbing, dropping and kick-offs. Walking off a moving platform now retains its motion. The ramp and wall fixes from Build 02 remain covered by full-route regressions.
+The accepted Build 03 physics are unchanged: run, jump, wall-kick, slide, catch slow ledges, borrow conveyor speed and launch from machinery. The campaign is a foundation for the planned 12-delivery slice, not the finished full game.
 
 ## Run locally
 
@@ -31,11 +31,11 @@ Open http://127.0.0.1:4173 in a desktop browser. If the port is occupied, set `$
 | R | Immediate retry |
 | Escape | Pause |
 | F2 | Physics telemetry |
-| 1–8 | Teleport to a lab station; records disabled |
+| 1–8 | Playground only: select a practice station; records disabled |
 
 **Station 8 tests ledges:** approach slowly while falling, hold toward the edge to climb, Down to drop, or Space to kick away. Fast approaches and slide input bypass the catch.
 
-The timer starts with movement. Death retries after 350 ms. Personal bests are saved locally and keyed by physics and level version. Lab rank targets are provisional. Sound is opt-in; reduced motion follows the system preference and can be changed below the game. No touch controls yet.
+The timer starts with movement. Death retries after 350 ms. Campaign progress saves to this browser under the First Shift version; playground records retain their physics/level keys. No account or cross-device synchronization. Medal targets are initial benchmarks based on verified routes. Sound is opt-in; reduced motion follows the system preference and can be changed below the game. No touch controls yet.
 
 ## Test
 
@@ -43,6 +43,6 @@ The timer starts with movement. Death retries after 350 ms. Personal bests are s
 node --test tests/*.test.mjs
 ```
 
-See [implementation GDD](docs/IMPLEMENTATION_GDD.md), [milestone status](docs/MILESTONE_1.md), and [playtest protocol](docs/PLAYTEST.md). Physics is independent of Canvas and DOM; no local build step is required. Every push to main runs the regression suite and publishes the game through the GitHub Pages workflow. Only game files enter the deployment artifact.
+See [implementation GDD](docs/IMPLEMENTATION_GDD.md), [First Shift status](docs/MILESTONE_2.md), and [playtest protocol](docs/PLAYTEST.md). Physics is independent of Canvas and DOM; no local build step is required. Every push to main runs the regression suite and publishes the game through the GitHub Pages workflow. Only game files enter the deployment artifact.
 
-For repeatable visual verification, open `/tests/playtest.html` on the running server. Its lower and wall routes use ordinary inputs through the same simulation and renderer; they never warp or save records. Pause and advance in quarter-second steps to inspect problem areas.
+For repeatable visual verification, open `/tests/playtest.html` on the running server. It includes all six campaign deliveries, a scaffold wall route, original lab routes and the ledge check. They use ordinary inputs through the same simulation and renderer; they never warp or save records. `/tests/session.html` replays the first two deliveries through the playable page and verifies results, unlocks and persistence after reload. It writes earned progress only on that development origin. These are automated replays, not human feel sessions. Test pages are excluded from deployment.

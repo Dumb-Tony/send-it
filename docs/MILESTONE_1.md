@@ -1,6 +1,6 @@
 # Milestone 1 — Movement laboratory
 
-Status: **Build 03; accepted movement tuning retained, ledge assistance and platform departures added.**
+Status: **Movement foundation retained in Build 04.** On 13 September the user approved the improved feel and requested full-game development. [First Shift / Milestone 2](MILESTONE_2.md) now adds a campaign around this foundation. The original Build 03 details and outstanding exploratory checks below remain the historical movement record.
 
 ## Build 03 — ledges and machinery transfers
 

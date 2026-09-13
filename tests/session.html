@@ -1,0 +1,28 @@
+<!doctype html><meta charset="utf-8"><title>SEND IT / Session regression</title>
+<style>body{background:#13242c;color:#eef1e7;font:14px Arial}button{padding:12px;margin:8px}iframe{width:100%;height:780px;border:0}#status{white-space:pre-wrap}</style>
+<button id="run">Replay first two deliveries and verify saved progress</button><p id="status">Ready. Uses DOM keyboard events at real speed. This test writes earned progress on this development origin.</p>
+<iframe id="session" src="../index.html" title="Playable SEND IT session"></iframe>
+<script type="module">
+const frame=document.getElementById('session'),status=document.getElementById('status');
+const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+function key(code,type){frame.contentWindow.dispatchEvent(new KeyboardEvent(type,{code,bubbles:true}));}
+document.getElementById('run').onclick=async()=>{
+  const button=document.getElementById('run');button.disabled=true;
+  try{
+    let doc=frame.contentDocument;
+    doc.querySelector('.job').click();status.textContent='Running dispatch 1 through the actual playable page…';
+    key('KeyD','keydown');await wait(4200);key('KeyD','keyup');
+    if(doc.getElementById('overlay').hidden)throw Error('Dispatch 1 result did not open');
+    status.textContent='Dispatch 1 result passed. Running dispatch 2…';
+    doc.getElementById('next').click();key('KeyS','keydown');key('KeyD','keydown');await wait(5200);key('KeyD','keyup');key('KeyS','keyup');
+    if(doc.getElementById('overlay').hidden||!doc.getElementById('mission-name').textContent.includes('management'))throw Error('Dispatch 2 did not complete');
+    doc.getElementById('board').click();
+    if(doc.querySelectorAll('.job')[2].disabled)throw Error('Dispatch 3 remained locked');
+    status.textContent='Both results and next-delivery flow passed. Reloading to check persistence…';
+    await new Promise(resolve=>{frame.onload=resolve;frame.contentWindow.location.reload();});
+    doc=frame.contentDocument;
+    if(doc.querySelectorAll('.job')[2].disabled||!doc.querySelector('.job').textContent.match(/EXPRESS|SEND IT|UNHINGED|DELIVERED/))throw Error('Progress did not survive reload');
+    status.textContent='PASSED: two full real-time keyboard replays, results, next delivery, unlocks and saved progress after reload.';
+  }catch(error){status.textContent='FAILED: '+error.message;}finally{button.disabled=false;}
+};
+</script>

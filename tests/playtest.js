@@ -2,9 +2,13 @@ import {lab} from '../src/level.js';
 import {createWorld,step,reset,DT} from '../src/physics.js';
 import {createRenderer} from '../src/render.js';
 import {standardRoute,wallRoute,withJumpReleases} from './routes.js';
+import {deliveries} from '../src/campaign.js';
+import {campaignRoute,scaffoldWallRoute} from './campaign-routes.js';
 const $=id=>document.getElementById(id),render=createRenderer($('game'));
 let w=createWorld(lab),driver=null,playing=false,last=0,acc=0,snap=true,checkpoints=[],seen=new Set(),name='Ready';
 function start(factory,label){w=createWorld(lab);driver=withJumpReleases(factory());name=label;playing=true;acc=0;snap=true;checkpoints=[];seen=new Set();}
+deliveries.forEach((level,i)=>{const b=document.createElement('button');b.textContent=`Dispatch ${i+1}`;b.onclick=()=>{start(standardRoute,level.name);w=createWorld(level);driver=campaignRoute(i);};$('campaign').append(b);});
+const upper=document.createElement('button');upper.textContent='Scaffold upper route';upper.onclick=()=>{start(standardRoute,'Scaffold upper route');w=createWorld(deliveries[4]);driver=scaffoldWallRoute();};$('campaign').append(upper);
 function tick(){
   if(!driver||w.status==='dead'||w.status==='complete')return;
   const input=driver(w),oldWall=w.p.wall;

@@ -15,3 +15,10 @@ Build 03 additionally provides **Run ledge check**. Inspect the slow approach, h
 Check R during movement, death and results. Check blur/pause, resume, repeated retry, refresh/personal best, reduced motion and optional sound. A warp run must not replace a standard record. Timer and machine phase reset together. Coral stripes are lethal; amber machine tops are supports.
 
 Feedback template: build commit / browser / station / attempted action / expected outcome / actual outcome / reproducibility / optional recording. Separate mechanical bugs from feel preferences. Do not accept M1 until both stable behavior and the 20-minute enjoyment test pass.
+# First Shift / Build 04 checks
+
+Run all 43 headless tests, then open `tests/playtest.html` on a development server. Run Dispatch 1–6 and Scaffold upper route; each must report COMPLETE / PARCEL DELIVERED — NO WARP. Inspect the fan landing and scaffold roof transfer visually, as well as the original lower/wall lab routes when movement changes.
+
+Open `tests/session.html` and click the first-two-deliveries replay. It uses ordinary DOM key events at real speed through the actual game page. Verify PASSED for results, next delivery, third-job unlock and progress after reload. This test saves earned progress on the development origin, never by granting records. Keep these test pages outside the public deployment artifact.
+
+On the playable page, check dispatch selection, keyboard jump/pause/retry, playground access and practice controls. Browser input replays are automated verification, not human feel testing. Cross-browser certification remains outstanding.
