@@ -1,5 +1,15 @@
 # SEND IT — art direction, Build 06
 
+## Build 07 — character, lighting and materials
+
+The next user-requested pass adds material differences and lighting rather than more level content. The courier is defined as **The Rookie**: cream helmet with stripe/scuffs and chin strap, orange fabric jacket with diagonal messenger strap and small company patch, teal bag, taped cardboard parcel and worn cream trainers. The dispatch portrait uses the same editable character drawing as gameplay.
+
+Materials use cached deterministic 128 px Canvas pattern tiles: staggered brick/mortar, rough stucco, poured concrete with form joints/tie holes, brushed sheet metal, wood boards/grain, fine fabric weave and asphalt aggregate. Patterns are generated once per renderer/context and reused; there are no external texture downloads. Window glass uses a separate reflective gradient and glint treatment.
+
+Lighting follows the existing upper-right sun: warmer lit corners, cooler shaded faces, recessed window/door shadows, cornice shade and leftward awning/sill shadows. A small courier shadow projects onto the nearest eligible solid surface below and fades with height. This is stylized illustration lighting, not a physically simulated lighting system. All effects remain presentation-only; physics, terrain, records and campaign content are unchanged.
+
+Verification: 43 simulation regressions, browser inspection of the character portrait and street materials, complete machinery route replay, and the first-two-deliveries session/persistence check.
+
 ## Source of truth
 
 Revisited the original **Game Theme Ideas** conversation on the user's request (conversation `6aa4e3f9-f1bc-83e9-8531-c2794a613f83`). Its section 23 calls for **clean illustrated 2D/2.5D urban cartoon**, strong silhouettes, slightly exaggerated architecture, big readable machinery, bright signage, chunky shapes and smooth animation. The preceding concept describes an expressive messenger with sneakers, helmet and an oversized jacket. Sections 11–12 describe a city that visibly transforms as the courier climbs.
