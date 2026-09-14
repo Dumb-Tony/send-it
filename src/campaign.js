@@ -64,7 +64,23 @@ special.contract={type:'SIGNATURE',label:'Do-not-leave parcel',note:'Upper blue 
 special.solids.push({id:'final-awning',x:950,y:790,w:240,h:24},{id:'final-roof',x:1450,y:620,w:490,h:26},{id:'final-runout',x:1950,y:760,w:300,h:24});
 special.labels=[{x:410,y:745,title:'SPECIAL INSTRUCTIONS',sub:'Belt to awning. Collect. Then catch the fan.'},{x:1600,y:525,title:'BLUE DOOR, UPPER LEVEL',sub:'The street route cannot finish this one.'}];
 const skyline={...lab,id:'skyline-shift',version:2,shift:2,name:'One percent battery',brief:'Collect the charger above the fan deck, then finish the climb.',district:'SKYLINE',stations:[],parcel:{x:2020,y:397,w:34,h:30},contract:{type:'FRAGILE',label:'Emergency charger',note:'Hard landings damage the parcel'},targets:{express:35,sendIt:22,unhinged:12}};
-export const deliveries=[first,slide,belt,fan,shaft,alley,returns,lunch,hoist,vents,special,skyline];
+const turnstile=street('turnstile-trouble','No stopping service','The station gate is stuck half-open. Naturally, the parcel is on the other side.',2400,{shift:3,district:'TRANSIT',targets:{express:17,sendIt:10,unhinged:6.5},conveyors:[{id:'baggage-belt',x:1080,y:856,w:390,h:14,speed:320}],hazards:[{id:'track-gap',x:1470,y:857,w:115,h:13,name:'Stepped onto the tracks',hint:'Use the baggage belt and jump before the coral rail gap.'}]});
+turnstile.parcel={x:470,y:836,w:34,h:30};turnstile.contract={type:'HOT',label:'Platform noodles',note:'Freshness falls after collection'};
+turnstile.solids.push({id:'ticket-gate',x:650,y:730,w:300,h:114},{id:'platform-bench',x:1660,y:830,w:180,h:40});
+turnstile.labels=[{x:520,y:680,title:'FARE GATE',sub:'Slide through before the bag catches.'},{x:1050,y:740,title:'BAGGAGE BELT',sub:'Ride it, then clear the tracks.'}];
+const platform=street('platform-change','Platform change','They changed platforms after pickup. The announcement was mostly static.',2600,{shift:3,district:'TRANSIT',delivery:{x:2320,y:452,w:110,h:88},targets:{express:20,sendIt:12,unhinged:7.8},fans:[{id:'platform-draft',x:820,y:590,w:190,h:280,force:3200},{id:'tunnel-draft',x:1420,y:500,w:190,h:370,force:3400}]});
+platform.parcel={x:650,y:836,w:34,h:30};platform.contract={type:'OVERSIZED',label:'Departure board',note:'Two updrafts reach the changed platform'};
+platform.solids.push({id:'middle-platform',x:1060,y:650,w:310,h:24},{id:'upper-platform',x:1660,y:540,w:940,h:30});
+platform.labels=[{x:690,y:520,title:'PLATFORM 2 → 7',sub:'Catch the first draft and transfer.'},{x:1320,y:430,title:'TUNNEL DRAFT',sub:'Stay in the air and steer right.'}];
+const fireEscape=street('fire-escape-mail','Third floor, rear entrance','The lift is out. The fire escape is making several worrying noises.',2500,{shift:3,district:'TRANSIT',delivery:{x:2200,y:572,w:110,h:88},targets:{express:22,sendIt:13,unhinged:8.5}});
+fireEscape.parcel={x:950,y:626,w:34,h:30};fireEscape.contract={type:'FRAGILE',label:'Antique station clock',note:'Wall-kick up; hard landings damage it'};
+fireEscape.solids.push({id:'escape-wall-a',x:650,y:570,w:50,h:210},{id:'escape-wall-b',x:820,y:630,w:50,h:150},{id:'escape-landing',x:870,y:660,w:510,h:24},{id:'signal-roof',x:1380,y:660,w:1120,h:24});
+fireEscape.labels=[{x:500,y:480,title:'FIRE ESCAPE',sub:'Alternate wall kicks to reach the parcel.'},{x:900,y:585,title:'FRAGILE COLLECTION',sub:'Keep the clock intact across the rooftops.'}];
+const rush=street('last-train','Last train home','Collect at the final platform, then bring the signature back before service ends.',3000,{shift:3,district:'TRANSIT',spawn:{x:220,y:834},delivery:{x:60,y:782,w:110,h:88},targets:{express:28,sendIt:18,unhinged:12},conveyors:[{id:'outbound-walkway',x:980,y:856,w:430,h:14,speed:300}],hazards:[{id:'last-track',x:1410,y:857,w:120,h:13,name:'Missed the last train',hint:'Jump the marked track gap in both directions.'}]});
+rush.parcel={x:2720,y:836,w:34,h:30};rush.contract={type:'SIGNATURE',label:'Final-platform signature',note:'Cross the station, collect, then return'};
+rush.solids.push({id:'late-gate',x:570,y:730,w:300,h:114},{id:'kiosk',x:1780,y:815,w:150,h:55},{id:'clock-step',x:2240,y:840,w:140,h:30});
+rush.labels=[{x:430,y:680,title:'OUTBOUND',sub:'Slide the gate and clear the tracks.'},{x:2440,y:745,title:'FINAL PLATFORM',sub:'Collect, turn around, do it all again.'}];
+export const deliveries=[first,slide,belt,fan,shaft,alley,returns,lunch,hoist,vents,special,skyline,turnstile,platform,fireEscape,rush];
 export function medal(time,targets){return time<=targets.unhinged?'UNHINGED':time<=targets.sendIt?'SEND IT':time<=targets.express?'EXPRESS':'DELIVERED';}
 export const progressKey='send-it:shift:1';
 export function readProgress(storage){

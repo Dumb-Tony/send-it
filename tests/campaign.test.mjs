@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import {deliveries,medal,readProgress,recordDelivery,unlockedCount,progressKey} from '../src/campaign.js';
 import {createWorld,step,overlap} from '../src/physics.js';
 import {campaignRoute,scaffoldWallRoute} from './campaign-routes.js';
-test('rookie route contains two complete six-delivery shifts with unique jobs',()=>{
-  assert.equal(deliveries.length,12);
-  assert.deepEqual(deliveries.map(level=>level.shift),[1,1,1,1,1,1,2,2,2,2,2,2]);
+test('rookie route contains three ordered shifts with unique jobs',()=>{
+  assert.equal(deliveries.length,16);
+  assert.deepEqual(deliveries.map(level=>level.shift),[1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3]);
   assert.equal(new Set(deliveries.map(level=>level.id)).size,deliveries.length);
 });
 test('every delivery declares a readable contract and the campaign mixes handling rules',()=>{
@@ -29,6 +29,10 @@ for(const [i,level] of deliveries.entries())test(`dispatch ${i+1}: complete deli
   if(i===6)assert.ok(sawLeft&&sawRight,'return job requires a round trip');
   if(i===7)assert.ok(grounds.has('market-belt')&&grounds.has('kitchen-belt')&&jumps>=2,'lunch route chains both belts');
   if(i===8)assert.ok(grounds.has('cargo-lift'),'upper-site delivery requires the cargo lift');
+  if(i===12)assert.ok(states.has('slide')&&grounds.has('baggage-belt')&&jumps>0,'transit opener requires gate slide and belt jump');
+  if(i===13)assert.ok(minY<500,'platform change requires both updraft transfers');
+  if(i===14)assert.ok(wallJumps>=2,'fire-escape collection requires repeated wall kicks');
+  if(i===15)assert.ok(sawLeft&&sawRight&&jumps>=5,'last train requires the full obstacle course in both directions');
 });
 test('parcel collection points are authored throughout the route instead of beside every spawn',()=>{
   assert.ok(deliveries.filter(level=>Math.abs(level.parcel.x-level.spawn.x)>400).length>=8);

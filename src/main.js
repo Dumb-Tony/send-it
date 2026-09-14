@@ -21,7 +21,7 @@ const progress=readProgress(storage);
 const format=s=>`${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toFixed(3).padStart(6,'0')}`;
 const handling=w=>!w.parcel?w.level.contract?.label||'Standard parcel':w.level.contract?.type==='HOT'?`Fresh ${Math.round(w.parcelFreshness)}%`:w.level.contract?.type==='FRAGILE'?`Condition ${Math.round(w.parcelCondition)}%`:'Secured';
 const labKey=`send-it:pb:${PHYSICS_VERSION}:${lab.id}:${lab.version}`;
-const replies=['“Still warm. You are a miracle.”','“You made it! We close in literally one second.”','“Perfect. Now we can stop the conveyor.”','“Could you water the plants on your way down?”','“Actually, could you put it upstairs? Kidding.”','“You avoided the paint? That is a first.”','“We moved yesterday. Sorry.”','“The soup is still technically soup!”','“The lift worked? Write down the date.”','“Could you close the other window too?”','“Blue door. Yes. That one. Obviously.”','“Thank you! My phone was at one percent.”'];
+const replies=['“Still warm. You are a miracle.”','“You made it! We close in literally one second.”','“Perfect. Now we can stop the conveyor.”','“Could you water the plants on your way down?”','“Actually, could you put it upstairs? Kidding.”','“You avoided the paint? That is a first.”','“We moved yesterday. Sorry.”','“The soup is still technically soup!”','“The lift worked? Write down the date.”','“Could you close the other window too?”','“Blue door. Yes. That one. Obviously.”','“Thank you! My phone was at one percent.”','“The noodles beat the train. Incredible.”','“That board has been wrong since Tuesday.”','“It still ticks! Mostly.”','“You came all the way back? I owe you train fare.”'];
 $('reduced-motion').checked=matchMedia('(prefers-reduced-motion: reduce)').matches;
 function clearInput(){keys.clear();jumpPressed=false;jumpReleased=false;accumulator=0;}
 function pause(value){paused=value;clearInput();$('paused').hidden=!value||boardOpen||world.status==='complete';}
@@ -36,7 +36,7 @@ function drawBoard(){
     if(l.shift!==currentShift){
       currentShift=l.shift;
       const heading=document.createElement('h2');heading.className='shift-divider';
-      heading.textContent=currentShift===1?'SHIFT ONE / LEARN THE STREETS':'SHIFT TWO / EARN THE JACKET';
+      heading.textContent={1:'SHIFT ONE / LEARN THE STREETS',2:'SHIFT TWO / EARN THE JACKET',3:'SHIFT THREE / MISS THE TRAIN'}[currentShift];
       $('jobs').append(heading);
     }
     const b=document.createElement('button');b.className='job'+(progress.records[l.id]?' delivered':'');b.disabled=i>=unlocked;
@@ -51,7 +51,7 @@ function select(i){
   if(i>=unlockedCount(progress))return;
   index=i;level=i<0?lab:deliveries[i];world=createWorld(level);attempts=0;best=i<0?null:progress.records[level.id]||null;
   if(i<0){try{const t=JSON.parse(storage?.getItem(labKey));if(Number.isFinite(t)&&t>0)best=t;}catch{}}
-  $('mission-name').textContent=level.name||'The proving ground';$('dispatch-number').textContent=i<0?'MOVEMENT PLAYGROUND':`DISPATCH 00${i+1}`;
+  $('mission-name').textContent=level.name||'The proving ground';$('dispatch-number').textContent=i<0?'MOVEMENT PLAYGROUND':`DISPATCH ${String(i+1).padStart(3,'0')}`;
   $('mission-district').textContent=level.district||'TRAINING';$('brief').textContent=level.brief||'Experiment freely. Number keys 1–8 select practice stations.';
   $('best').textContent=best?format(best):'—';$('handling').textContent=handling(world);boardOpen=false;$('dispatch').hidden=true;$('feedback').hidden=true;feedbackUntil=0;restart();
   canvas.scrollIntoView({block:'center',behavior:'instant'});

@@ -2,6 +2,8 @@
 
 A momentum courier platformer. **If there's an address, we deliver.**
 
+**Build 14 / Night Service:** adds a four-delivery Transit district and a third shift, bringing the campaign to sixteen jobs. New routes combine fare-gate slides, baggage walkways, marked track gaps, paired station drafts, fire-escape wall kicks, rooftop crossings, and a final out-and-back obstacle course. Transit receives its own dusk color treatment, overhead lines, contracts, recipient replies, progression group, and verified routes.
+
 **Build 13 / Special Handling:** adds five contract categories across the Rookie Route. Hot deliveries lose freshness after collection; fragile parcels take damage from hard landings and can break; oversized and signature jobs call out their route requirement. Contract type appears on every dispatch card, live package status sits in the HUD, and the result records handling quality.
 
 **Build 12 / Real Routes:** reconstructs the campaign around required mechanics and authored collection points. Parcels may be beyond shutters, on scaffolds and rooftops, or across town; later routes require chained belts, wall kicks, cargo-lift timing and fan transfers. A larger hot-pink parcel with a cream label, dark outline, glow and locator beam stays readable against the illustrated city.
@@ -20,7 +22,7 @@ A momentum courier platformer. **If there's an address, we deliver.**
 
 The public game is hosted on GitHub Pages and works without a local server. Share that play link with friends. Desktop keyboard controls are required; Brave is expected to work, but has not yet been separately certified.
 
-The Rookie Route is the campaign alpha: twelve short deliveries across Street Level, Construction and the Skyline, with an unlockable dispatch board, recipient messages, local medals and personal bests. The movement playground remains available separately.
+The Rookie Route is the campaign alpha: sixteen deliveries across Street Level, Construction, Skyline and Transit, with an unlockable dispatch board, recipient messages, local medals and personal bests. The movement playground remains available separately.
 
 The accepted Build 03 physics are unchanged: run, jump, wall-kick, slide, catch slow ledges, borrow conveyor speed and launch from machinery.
 
@@ -59,7 +61,7 @@ node --test tests/*.test.mjs
 
 See [implementation GDD](docs/IMPLEMENTATION_GDD.md), [Rookie Route status](docs/MILESTONE_3.md), and [playtest protocol](docs/PLAYTEST.md). Physics is independent of Canvas and DOM; no local build step is required. Every push to main runs the regression suite and publishes the game through the GitHub Pages workflow. Only game files enter the deployment artifact.
 
-For repeatable visual verification, open `/tests/playtest.html` on the running server. It includes all twelve campaign deliveries, a scaffold wall route, original lab routes and the ledge check. They use ordinary inputs through the same simulation and renderer; they never warp or save records. `/tests/session.html` replays the first two deliveries through the playable page and verifies results, unlocks and persistence after reload. It writes earned progress only on that development origin. These are automated replays, not human feel sessions. Test pages are excluded from deployment.
+For repeatable visual verification, open `/tests/playtest.html` on the running server. It includes all sixteen campaign deliveries, a scaffold wall route, original lab routes and the ledge check. They use ordinary inputs through the same simulation and renderer; they never warp or save records. `/tests/session.html` replays the first two deliveries through the playable page and verifies results, unlocks and persistence after reload. It writes earned progress only on that development origin. These are automated replays, not human feel sessions. Test pages are excluded from deployment.
 
 Build 09 gives the courier and city a shared rounded cartoon treatment: expressive proportions, soft volume, chunky shoes, framed shop signs and readable platform lips. Movement tuning is unchanged.
 

@@ -2,7 +2,7 @@
 
 Version 0.4 • 13 September 2026 • Working implementation specification
 
-Build status: the user approved the improved movement and requested full-game development. **First Shift**, the initial six-delivery campaign alpha, is now implemented with local progression, medals and a dispatch board; see [Milestone 2](MILESTONE_2.md). Five new courses lead into a capstone that reuses the lab geometry. The original 12-delivery slice remains the next content target; the full-game systems below remain specifications unless explicitly marked implemented. Accepted movement constants are unchanged.
+Build status: the user approved the improved movement and requested full-game development. The current Rookie Route contains sixteen deliveries across three shifts, four visual districts, five contract types, local progression, medals and a dispatch board. Builds 11–14 expanded and reconstructed the campaign beyond the original twelve-delivery slice. The full-game systems below remain specifications unless explicitly marked implemented. Accepted movement constants are unchanged.
 
 **A momentum platformer about getting a package where it absolutely should not be possible to deliver.**
 
@@ -270,6 +270,8 @@ Build 11 completes the twelve-delivery route count with two sequential six-job s
 Build 12 reconstructs those jobs around mandatory route actions rather than a flat recovery floor. The learning order now moves from jump and slide gates into conveyor gaps, fans, wall climbing, a full out-and-back collection, chained belts, moving lifts and mixed-mechanic upper routes. Parcel locations are part of route planning, with collection points spread through each course and several placed above street level.
 
 Build 13 introduces the first package-objective layer. Every job declares a visible Standard, Hot, Fragile, Oversized, or Signature contract. Hot freshness counts down only after collection; fragile condition responds to landing impact and reaches a clear failure at zero. Contract status is shown on the board, HUD, feedback banner, and result screen.
+
+Build 14 adds Transit as the first district beyond the original slice: four jobs and a third shift extend the route to sixteen deliveries. Transit recombines proven mechanics into longer sequences and introduces two-way obstacle traversal, with a dusk-painted station treatment distinct from Street and Construction.
 
 ### M3 — Release-quality foundation
 
