@@ -1,6 +1,7 @@
 import {resident,planter,pigeon,tree,van,fireEscape} from './city-life.js';
 import {material,surfaceLight,insetShadow,castShadow} from './materials.js';
 import {roundedPanel} from './toon.js';
+import {paintedBackdrop} from './painted-art.js';
 const ink='#4a6875';
 function box(c,x,y,w,h,col,r=0){if(w>15&&h>10){roundedPanel(c,x,y,w,h,col,Math.max(r,Math.min(12,h*.18)));return;}c.fillStyle=col;c.beginPath();c.roundRect(x,y,w,h,r);c.fill();}
 function line(c,x,y,xx,yy,col=ink,w=2){c.strokeStyle=col;c.lineWidth=w;c.lineCap='round';c.beginPath();c.moveTo(x,y);c.lineTo(xx,yy);c.stroke();}
@@ -24,6 +25,7 @@ function tower(c,x,y,w,h,col){
   for(let row=0;row<Math.min(9,Math.floor(h/75));row++)for(let k=0;k<Math.floor(w/58);k++)window(c,x+15+k*58,y+22+row*74,30,43);
 }
 export function cityBackdrop(c,w,camera,W,H,time=0){
+  if(paintedBackdrop(c,w,camera,W,H))return;
   const construction=w.level.district==='CONSTRUCTION',skyline=w.level.district==='SKYLINE';
   const gradient=c.createLinearGradient(0,0,0,H);gradient.addColorStop(0,skyline?'#629bc7':construction?'#7cbbd4':'#83c7de');gradient.addColorStop(1,skyline?'#d4e8e8':'#fbe5bd');c.fillStyle=gradient;c.fillRect(0,0,W,H);
   dot(c,W-190-camera.x*.025,103,58,'#fff0ac');

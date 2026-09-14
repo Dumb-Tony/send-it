@@ -63,3 +63,11 @@ Courier: larger domed helmet and three-quarter face, two large eyes, full cheeks
 Level: shared rounded-panel rendering, cream-framed rounded windows, pill-shaped shop signs, shaded vehicles/planters, softer city surfaces, rounded machinery housings, and distinct wood/fabric/metal/brick patterns at lower visual noise. Walkable platform tops retain their exact collision positions. District identity and existing movement/geometry are preserved.
 
 Source: original Canvas vector artwork in courier.js, toon.js and platform-art.js, with matching updates to the district, city-life, machinery and recipient artwork. No third-party assets were copied.
+
+## Build 10 — approved Higgsfield artwork in the game
+
+The user approved Higgsfield concept job `0a53b5c5-29d4-4a3e-b5f1-b9bfc494cbeb`. That image was supplied as the reference for a transparent sixteen-pose courier atlas and separate Street, Construction and Skyline scenery. Actual generated pixels now render in the game, rather than being approximated with vector shapes.
+
+`docs/HIGGSFIELD_ASSETS.json` records the complete prompts, model, reference and job IDs. Runtime assets are versioned WebP files under `src/assets/`; source PNGs are retained locally in ignored `artifacts/source-art/`. `scripts/prepare-art.cjs` converts them with sharp and measures connected alpha bounds so poses crossing the nominal grid do not lose shoes or hands. Total runtime artwork is approximately 2.5 MB.
+
+The controller selects eight running frames, idle with gentle breathing, jumping, falling, sliding, wall bracing, ledge hanging, landing and celebrating. A small gold tag indicates the parcel. The portrait redraws when the atlas loads. Existing vector art remains a loading/error fallback. Scenery repeats in reflected tiles without text seams; interactive platforms, machinery, hazards and delivery markers remain foreground graphics at the original collision coordinates. Camera magnification is 1.2; physics and level layouts are unchanged.

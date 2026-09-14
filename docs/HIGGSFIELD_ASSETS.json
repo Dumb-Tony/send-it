@@ -1,0 +1,32 @@
+{
+  "referenceJob": "0a53b5c5-29d4-4a3e-b5f1-b9bfc494cbeb",
+  "model": "gpt_image_2_5",
+  "quality": "high",
+  "resolution": "2k",
+  "assets": [
+    {
+      "name": "courier",
+      "file": "src/assets/courier-v10.webp",
+      "job": "d4633a4a-2833-41b4-8aa5-284899ce3835",
+      "prompt": "Use the supplied SEND IT concept sheet as the exact character identity and rendered art reference. Same young adult male courier, medium brown skin, expressive dark brows, short black curls, cream cycling helmet with orange stripe, orange bomber jacket, navy trousers, oversized cream sneakers, mustard scarf, cobalt messenger bag. Preserve the sculpted dimensional cartoon quality, fabric folds, soft lighting and personality. No outlines, no flat vector, no chibi. Create a production sprite atlas on TRUE TRANSPARENT background: exactly 4 columns and 4 rows, 16 equally sized square cells, each containing the same entire full body facing RIGHT in a side view, same orthographic camera and lighting. Each figure centered horizontally in its cell, shoes on a shared baseline near 90% cell height in grounded poses, neutral standing figure fills 80% cell height. Leave generous transparent gutters. No floor, cast shadow, labels, text, separators or background. Each cell must be completely isolated, no overlap or cropping. Row 1: idle relaxed standing; running stride contact left leg forward; running down/compression; running passing pose. Row 2: running flight left leg back; running opposite contact right leg forward; running opposite compression; running opposite passing pose. Row 3: running opposite flight; jumping launch with knee tucked; falling with arms reaching forward; low sliding with bent knees and body leaning back (body occupies bottom 50% of cell). Row 4: wall-brace with hands to right; ledge hanging with hands overhead toward right; landing crouch with knees bent; delivery celebration standing raised fist. Every character wears the SAME EMPTY blue messenger bag, no visible parcel. Keep head size, torso dimensions and skeletal proportions consistent across all sixteen images. 2048x2048."
+    },
+    {
+      "name": "street",
+      "file": "src/assets/street-v10.webp",
+      "job": "3c4ecf85-3dc1-4b8e-aef2-9572c53070d5",
+      "prompt": "Use the supplied concept sheet's lower-right city environment as the exact visual-quality and art direction reference. Production background for a side-scrolling 2D platformer rendered as premium stylized 3D cartoon illustration. Rich shaped architecture, warm soft sunlight upper left, realistic cartoon material response and soft ambient occlusion, inviting saturated palette but restrained background contrast. Orthographic straight SIDE ELEVATION, no tilted camera, no vanishing-point street, no foreground objects or characters or UI or lettering. Wide 16:9 panorama. All architecture is BEHIND the playable foreground. Building bases precisely at bottom edge, no road or sidewalk at bottom. Upper third open pale blue sky with soft clouds. Left and right edges end in narrow matching blue shadowed building facades so they can repeat. STREET district: three charming 2-3 story shopfronts: teal cafe with striped fabric awning, peach brick bakery with glowing pastry window, lavender parcel shop; curved window trims, potted plants attached to building walls, fire escapes, leafy balcony planters. Match the approved neighborhood example closely. No people."
+    },
+    {
+      "name": "construction",
+      "file": "src/assets/construction-v10.webp",
+      "job": "e60be2f1-0c78-405b-8e21-98ab47e3e4cf",
+      "prompt": "Use the supplied concept sheet's lower-right city environment as the exact visual-quality and art direction reference. Production background for a side-scrolling 2D platformer rendered as premium stylized 3D cartoon illustration. Rich shaped architecture, warm soft sunlight upper left, realistic cartoon material response and soft ambient occlusion, inviting saturated palette but restrained background contrast. Orthographic straight SIDE ELEVATION, no tilted camera, no vanishing-point street, no foreground objects or characters or UI or lettering. Wide 16:9 panorama. All architecture is BEHIND the playable foreground. Building bases precisely at bottom edge, no road or sidewalk at bottom. Upper third open pale blue sky with soft clouds. Left and right edges end in narrow matching blue shadowed building facades so they can repeat. CONSTRUCTION district: warm terracotta masonry renovation site, ochre steel beams, wood scaffolding, partly built floors, distant tower crane, cobalt tarps draped behind open frames, neatly stacked bricks in recessed rooms. Friendly chunky rounded machinery shapes; NO platforms projecting into foreground, no hazards in foreground. Background only."
+    },
+    {
+      "name": "skyline",
+      "file": "src/assets/skyline-v10.webp",
+      "job": "22d545d9-1a8e-4130-95e3-3c8c9cdc3ace",
+      "prompt": "Use the supplied concept sheet's lower-right city environment as the exact visual-quality and art direction reference. Production background for a side-scrolling 2D platformer rendered as premium stylized 3D cartoon illustration. Rich shaped architecture, warm soft sunlight upper left, realistic cartoon material response and soft ambient occlusion, inviting saturated palette but restrained background contrast. Orthographic straight SIDE ELEVATION, no tilted camera, no vanishing-point street, no foreground objects or characters or UI or lettering. Wide 16:9 panorama. All architecture is BEHIND the playable foreground. Building bases precisely at bottom edge, no road or sidewalk at bottom. Upper third open pale blue sky with soft clouds. Left and right edges end in narrow matching blue shadowed building facades so they can repeat. SKYLINE district: sunlit upper stories and rooftops of colorful city buildings, cream cornices, lavender and teal towers, rooftop water tanks and chimneys, distant atmospheric city silhouettes. Heroic open sky, rooftop courier atmosphere. All towers rise from bottom edge. No foreground bridge or platforms."
+    }
+  ]
+}

@@ -1,5 +1,35 @@
 // A single vector puppet shared by the gameplay sprite and employee portrait.
 // All posing is presentation-only; the controller owns the collider and movement.
+import {courierAsset} from './painted-art.js';
+import {courierFrames} from './assets/courier-frames.js';
+export function courierPose(p,time,{landing=0,delivered=false,reducedMotion=false}={}){
+  if(delivered)return 15;
+  if(p.ledge)return p.ledge.phase==='mantle'?14:13;
+  if(p.h<30)return 11;
+  if(p.state==='wall slide')return 12;
+  if(!p.grounded)return p.vy<0?9:10;
+  if(landing>.15)return 14;
+  if(Math.abs(p.vx)>25)return reducedMotion?1:1+Math.floor(time*14)%8;
+  return 0;
+}
+function paintedCourier(c,p,time,parcel,options){
+  const img=courierAsset.image;if(!img.complete||!img.naturalWidth)return false;
+  const pose=courierPose(p,time,options),f=courierFrames[pose],scale=.09;
+  const idle=pose===0&&!options.reducedMotion,breath=idle?Math.sin(time*3)*.008:0;
+  const h=f.h*scale*(1+breath),width=f.w*scale;
+  const gripX=pose===13?9:pose===12?(p.w-width)/2:0;
+  const gripY=pose===13?h-p.h+8:0;
+  c.save();c.translate(p.x+p.w/2+p.facing*gripX,p.y+p.h+gripY);c.scale(p.facing,1);
+  // A tiny counter-lean makes braking readable without changing the collision box.
+  if(p.grounded&&p.vx*p.facing<-70)c.transform(1,0,.16,1,0,0);
+  c.drawImage(img,f.x,f.y,f.w,f.h,-width/2,-h,width,h);
+  if(parcel&&!options.delivered){
+    const bx=-width*.2,by=-h*.43;
+    c.fillStyle='#9b6133';c.beginPath();c.roundRect(bx,by,4,5,1);c.fill();
+    c.fillStyle='#f7cd7f';c.fillRect(bx+.5,by+.5,3,3.5);c.fillStyle='#fff0bd';c.fillRect(bx+1.5,by+.5,1,3.5);
+  }
+  c.restore();return true;
+}
 const INK='#172a40',RIM='#fff3d8',SKIN='#f4b582',ORANGE='#ff6b38';
 function stroke(c,points,color,width){c.strokeStyle=color;c.lineWidth=width;c.lineCap='round';c.lineJoin='round';c.beginPath();points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.stroke();}
 function shade(c,y,light,mid,dark,height=16){const g=c.createLinearGradient(-8,y,9,y+height);g.addColorStop(0,light);g.addColorStop(.48,mid);g.addColorStop(1,dark);return g;}
@@ -8,6 +38,7 @@ function oval(c,x,y,rx,ry,color){c.fillStyle=color;c.beginPath();c.ellipse(x,y,r
 function limb(c,points,color,width=5){stroke(c,points,INK,width+1.2);stroke(c,points,color,width);stroke(c,points.map(([x,y])=>[x-.7,y-.6]),'#ffffff24',width*.32);}
 function shoe(c,x,y,angle=0){c.save();c.translate(x,y);c.rotate(angle);shape(c,p=>{p.moveTo(-5,-1);p.quadraticCurveTo(-6,-6,0,-5);p.quadraticCurveTo(3,-5,4,-2);p.bezierCurveTo(11,-3,12,2,8,3);p.lineTo(-3,3);p.quadraticCurveTo(-6,3,-5,-1);},shade(c,-5,'#fffdf1','#f2e6c8','#adafbc',8));stroke(c,[[-3,0],[1,0],[3,-1]],'#ff713f',2.2);stroke(c,[[-3,2],[8,2]],'#fff9e5',1.5);stroke(c,[[1,-3],[3,-3]],'#fff',1.2);c.restore();}
 export function drawCourier(c,p,time,parcel,{landing=0,reducedMotion=false,delivered=false}={}){
+  if(paintedCourier(c,p,time,parcel,{landing,reducedMotion,delivered}))return;
   const crouch=p.h<30,hang=!!p.ledge,wall=p.state==='wall slide';
   const run=p.grounded&&Math.abs(p.vx)>25&&!crouch&&!delivered;
   const skid=run&&p.vx*p.facing<-70,air=!p.grounded&&!hang&&!delivered,up=air&&p.vy<0;

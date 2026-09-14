@@ -26,3 +26,12 @@ On the playable page, check dispatch selection, keyboard jump/pause/retry, playg
 ### Build 09 rounded cartoon regression
 
 All 43 simulation tests passed. Browser pose review covered idle, run, braking, rising/falling, sliding, wall slide and hanging at enlarged and gameplay scales. Browser input replays completed Construction Air Mail (5.267s), Skyline (10.042s), and Street shutter route (4.100s). These are automated replays, not manual feel testing. Street, Construction and Skyline artwork was visually inspected; route browser reported no errors. No physics or level geometry files changed.
+
+### Build 10 — Higgsfield assets and closer camera
+
+- All 43 simulation regressions passed; package includes all four versioned WebP assets and the frame manifest.
+- Browser input replays: shutter delivery 4.100s, Scaffold upper route 4.817s with four wall kicks, Skyline 10.042s, and ledge hold/mantle check .925s.
+- Actual playable-page keyboard replay passed two deliveries, results, next-delivery flow, unlocks and progress after reload.
+- Inspected all eight pose categories at small and enlarged scales, stopped the ledge replay to align hands at the lip, and reviewed Street, Construction and Skyline scenery.
+- Game and route-page browser logs were clean. The session harness captured one MutationObserver error during iframe reload; neither game nor test source uses MutationObserver, and the reload/persistence assertions passed.
+- These checks are automated input replays plus visual inspection, not human feel testing. Original movement and collision geometry are unchanged; only camera magnification and artwork changed.

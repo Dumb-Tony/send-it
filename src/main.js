@@ -3,11 +3,16 @@ import {deliveries,medal,readProgress,recordDelivery,unlockedCount,progressKey} 
 import {createWorld,reset,step,DT,PHYSICS_VERSION} from './physics.js';
 import {createRenderer} from './render.js';
 import {drawCourier} from './art.js';
+import {artReady} from './painted-art.js';
 const $=id=>document.getElementById(id),canvas=$('game'),render=createRenderer(canvas),keys=new Set();
 const portrait=$('courier-portrait').getContext('2d');
+function drawPortrait(){
+portrait.clearRect(0,0,220,180);
 portrait.fillStyle='#d8e4d5';portrait.beginPath();portrait.ellipse(110,94,77,70,-.15,0,Math.PI*2);portrait.fill();
 portrait.fillStyle='#29445528';portrait.beginPath();portrait.ellipse(112,155,47,8,0,0,Math.PI*2);portrait.fill();
-portrait.save();portrait.translate(67,19);portrait.scale(3.7,3.7);drawCourier(portrait,{x:0,y:0,w:24,h:36,vx:0,vy:0,grounded:true,facing:1,state:'idle'},0,true);portrait.restore();
+portrait.save();portrait.translate(67,29);portrait.scale(3.7,3.7);drawCourier(portrait,{x:0,y:0,w:24,h:36,vx:0,vy:0,grounded:true,facing:1,state:'idle'},0,true);portrait.restore();
+}
+drawPortrait();artReady.then(drawPortrait);
 let level=deliveries[0],world=createWorld(level),index=0,boardOpen=true;
 let jumpPressed=false,jumpReleased=false,paused=true,debug=false,accumulator=0,last=0,deathDelay=0,cameraReset=true;
 let best=null,soundContext=null,storageAvailable=true,feedbackUntil=0,attempts=0;

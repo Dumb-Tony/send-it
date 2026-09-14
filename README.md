@@ -56,3 +56,5 @@ See [implementation GDD](docs/IMPLEMENTATION_GDD.md), [First Shift status](docs/
 For repeatable visual verification, open `/tests/playtest.html` on the running server. It includes all six campaign deliveries, a scaffold wall route, original lab routes and the ledge check. They use ordinary inputs through the same simulation and renderer; they never warp or save records. `/tests/session.html` replays the first two deliveries through the playable page and verifies results, unlocks and persistence after reload. It writes earned progress only on that development origin. These are automated replays, not human feel sessions. Test pages are excluded from deployment.
 
 Build 09 gives the courier and city a shared rounded cartoon treatment: expressive proportions, soft volume, chunky shoes, framed shop signs and readable platform lips. Movement tuning is unchanged.
+
+Build 10 integrates the approved Higgsfield art: a transparent animated courier and illustrated scenery for all three districts. Versioned WebP assets are self-hosted with the game; the closer camera improves readability while preserving movement tuning.
