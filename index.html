@@ -7,7 +7,7 @@
 </head>
 <body>
   <main>
-    <header><div class="brand">SEND IT<span>IF THERE'S AN ADDRESS, WE DELIVER.</span></div><div class="build">THE NEIGHBOURHOOD COURIER CO.<b>12 / REAL ROUTES</b></div></header>
+    <header><div class="brand">SEND IT<span>IF THERE'S AN ADDRESS, WE DELIVER.</span></div><div class="build">THE NEIGHBOURHOOD COURIER CO.<b>13 / SPECIAL HANDLING</b></div></header>
     <section id="dispatch" aria-label="Dispatch board">
       <div class="dispatch-heading"><div><span class="eyebrow">THE ROOKIE ROUTE / EST. THIS MORNING</span><h1>Small parcel.<br><em>Big city.</em></h1><p>Twelve deliveries. Two shifts. One very questionable career choice.</p></div><div class="courier-card"><span class="eyebrow">EMPLOYEE OF THE MOMENT</span><canvas id="courier-portrait" width="220" height="170" aria-label="The Rookie: cream helmet, orange work jacket, blue messenger bag and chunky cream sneakers"></canvas><b>THE ROOKIE</b><small>Qualified? Debatable. Committed? Absolutely.</small></div><strong id="shift-progress">0 / 12 delivered</strong></div>
       <div id="jobs" class="jobs"></div>
@@ -18,6 +18,7 @@
       <div><span id="dispatch-number">DISPATCH 001</span><strong id="mission-name">The coffee is getting cold</strong></div>
       <div><span>RUN TIME</span><strong id="time">00:00.000</strong></div>
       <div><span>PERSONAL BEST</span><strong id="best">—</strong></div>
+      <div><span>PACKAGE</span><strong id="handling">Standard parcel</strong></div>
       <div><span>MOMENTUM</span><strong id="speed">0 <small>px/s</small></strong></div>
       <button id="restart">Restart <kbd>R</kbd></button>
     </section>
@@ -29,7 +30,7 @@
     </div>
     <footer><div><kbd>A</kbd><kbd>D</kbd> move <kbd>SPACE</kbd> jump / wall jump <kbd>S</kbd> slide <kbd>R</kbd> retry <kbd>ESC</kbd> pause</div><button id="debug">Telemetry <kbd>F2</kbd></button></footer>
     <section class="notes"><p><b>COLLECT. COMMIT. DELIVER.</b> Find the hot-pink parcel and reach the green recipient bay. Finish a job to unlock the next. Chase Express, Send It and Unhinged medals on repeat runs.</p><p><b>THE CITY IS YOUR MOVESET.</b> Amber moves you. Blue lifts you. Coral ends the attempt. A fall can reveal another route. There is no double jump: borrow your power from the city.</p></section>
-    <details><summary>Controls & accessibility</summary><p>In the movement playground only, number keys select practice stations: 1 runway · 2 slope · 3 wall shaft · 4 conveyor · 5 fan · 6 piston · 7 moving lift · 8 ledge assist. Practice does not save records.</p><label><input id="reduced-motion" type="checkbox"> Reduce motion trails</label><label><input id="sound" type="checkbox"> Enable sound</label><p>For a ledge catch, approach a static edge slowly while falling. Hold toward the edge to climb, press Down to drop, or Space to kick away. Fast movement and slide input bypass the catch.</p><p>Arrow keys also work. Hold jump for height. Timer starts on your first movement input. Switching away pauses the game. Progress is local to this browser; friends earn their own medals.</p></details>
+    <details><summary>Controls & accessibility</summary><p>In the movement playground only, number keys select practice stations: 1 runway · 2 slope · 3 wall shaft · 4 conveyor · 5 fan · 6 piston · 7 moving lift · 8 ledge assist. Practice does not save records.</p><label><input id="reduced-motion" type="checkbox"> Reduce motion trails</label><label><input id="sound" type="checkbox"> Enable sound</label><p>Hot contracts lose freshness after collection. Fragile contracts lose condition on hard landings and break at zero. Oversized and signature contracts identify their required route in the dispatch brief.</p><p>For a ledge catch, approach a static edge slowly while falling. Hold toward the edge to climb, press Down to drop, or Space to kick away. Fast movement and slide input bypass the catch.</p><p>Arrow keys also work. Hold jump for height. Timer starts on your first movement input. Switching away pauses the game. Progress is local to this browser; friends earn their own medals.</p></details>
   </main>
   <script type="module" src="src/main.js"></script>
 </body>

@@ -11,8 +11,9 @@ document.getElementById('run').onclick=async()=>{
   try{
     let doc=frame.contentDocument;
     doc.querySelector('.job').click();status.textContent='Running dispatch 1 through the actual playable page…';
-    key('KeyD','keydown');await wait(4200);key('KeyD','keyup');
+    key('KeyD','keydown');await wait(700);key('Space','keydown');await wait(320);key('Space','keyup');await wait(3300);key('KeyD','keyup');
     if(doc.getElementById('overlay').hidden)throw Error('Dispatch 1 result did not open');
+    if(!doc.getElementById('result-detail').textContent.includes('Freshness'))throw Error('Hot-delivery freshness was not reported');
     status.textContent='Dispatch 1 result passed. Running dispatch 2…';
     doc.getElementById('next').click();key('KeyS','keydown');key('KeyD','keydown');await wait(5200);key('KeyD','keyup');key('KeyS','keyup');
     if(doc.getElementById('overlay').hidden||!doc.getElementById('mission-name').textContent.includes('management'))throw Error('Dispatch 2 did not complete');

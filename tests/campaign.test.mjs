@@ -8,6 +8,11 @@ test('rookie route contains two complete six-delivery shifts with unique jobs',(
   assert.deepEqual(deliveries.map(level=>level.shift),[1,1,1,1,1,1,2,2,2,2,2,2]);
   assert.equal(new Set(deliveries.map(level=>level.id)).size,deliveries.length);
 });
+test('every delivery declares a readable contract and the campaign mixes handling rules',()=>{
+  assert.ok(deliveries.every(level=>level.contract?.type&&level.contract.label&&level.contract.note));
+  const types=new Set(deliveries.map(level=>level.contract.type));
+  assert.deepEqual(types,new Set(['HOT','STANDARD','FRAGILE','OVERSIZED','SIGNATURE']));
+});
 for(const [i,level] of deliveries.entries())test(`dispatch ${i+1}: complete delivery from spawn with ordinary inputs`,()=>{
   const w=createWorld(level),driver=campaignRoute(i);let picked=false,jumps=0,wallJumps=0,minY=w.p.y,sawLeft=false,sawRight=false;const states=new Set(),grounds=new Set();
   for(let t=0;t<7200&&w.status!=='complete'&&w.status!=='dead';t++){

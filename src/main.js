@@ -19,6 +19,7 @@ let best=null,soundContext=null,storageAvailable=true,feedbackUntil=0,attempts=0
 let storage;try{storage=localStorage;storage.getItem(progressKey);}catch{storageAvailable=false;}
 const progress=readProgress(storage);
 const format=s=>`${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toFixed(3).padStart(6,'0')}`;
+const handling=w=>!w.parcel?w.level.contract?.label||'Standard parcel':w.level.contract?.type==='HOT'?`Fresh ${Math.round(w.parcelFreshness)}%`:w.level.contract?.type==='FRAGILE'?`Condition ${Math.round(w.parcelCondition)}%`:'Secured';
 const labKey=`send-it:pb:${PHYSICS_VERSION}:${lab.id}:${lab.version}`;
 const replies=['“Still warm. You are a miracle.”','“You made it! We close in literally one second.”','“Perfect. Now we can stop the conveyor.”','“Could you water the plants on your way down?”','“Actually, could you put it upstairs? Kidding.”','“You avoided the paint? That is a first.”','“We moved yesterday. Sorry.”','“The soup is still technically soup!”','“The lift worked? Write down the date.”','“Could you close the other window too?”','“Blue door. Yes. That one. Obviously.”','“Thank you! My phone was at one percent.”'];
 $('reduced-motion').checked=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -39,7 +40,7 @@ function drawBoard(){
       $('jobs').append(heading);
     }
     const b=document.createElement('button');b.className='job'+(progress.records[l.id]?' delivered':'');b.disabled=i>=unlocked;
-    const label=document.createElement('span');label.className='eyebrow';label.textContent=`${String(i+1).padStart(2,'0')} / ${l.district}`;
+    const label=document.createElement('span');label.className='eyebrow';label.textContent=`${String(i+1).padStart(2,'0')} / ${l.district} · ${l.contract?.type||'STANDARD'}`;
     const title=document.createElement('strong');title.textContent=l.name;
     const detail=document.createElement('span');detail.className='job-status';const t=progress.records[l.id];
     detail.textContent=t?`${medal(t,l.targets)} · ${format(t)}`:i>=unlocked?'Complete the previous delivery to unlock':'Ready for dispatch ↗';
@@ -52,7 +53,7 @@ function select(i){
   if(i<0){try{const t=JSON.parse(storage?.getItem(labKey));if(Number.isFinite(t)&&t>0)best=t;}catch{}}
   $('mission-name').textContent=level.name||'The proving ground';$('dispatch-number').textContent=i<0?'MOVEMENT PLAYGROUND':`DISPATCH 00${i+1}`;
   $('mission-district').textContent=level.district||'TRAINING';$('brief').textContent=level.brief||'Experiment freely. Number keys 1–8 select practice stations.';
-  $('best').textContent=best?format(best):'—';boardOpen=false;$('dispatch').hidden=true;$('feedback').hidden=true;feedbackUntil=0;restart();
+  $('best').textContent=best?format(best):'—';$('handling').textContent=handling(world);boardOpen=false;$('dispatch').hidden=true;$('feedback').hidden=true;feedbackUntil=0;restart();
   canvas.scrollIntoView({block:'center',behavior:'instant'});
 }
 function restart(station=-1){reset(world,station);deathDelay=0;clearInput();cameraReset=true;$('overlay').hidden=true;pause(false);canvas.focus({preventScroll:true});}
@@ -64,7 +65,8 @@ function completed(){
     $('best').textContent=format(best);
   }
   $('result-label').textContent=world.practice?'PRACTICE DELIVERY':medal(t,targets);$('result-time').textContent=format(t);
-  $('result-detail').textContent=`${pb?'New personal best! ':''}${world.practice?'Practice — no record saved.':`Express ${targets.express}s · Send It ${targets.sendIt}s · Unhinged ${targets.unhinged}s. ${attempts} retries.`}${storageAvailable?'':' Storage unavailable; progress lasts this session.'}`;
+  const condition=level.contract?.type==='HOT'?`Freshness ${Math.round(world.parcelFreshness)}%.`:level.contract?.type==='FRAGILE'?`Parcel condition ${Math.round(world.parcelCondition)}%.`:`${level.contract?.label||'Parcel'} secured.`;
+  $('result-detail').textContent=`${pb?'New personal best! ':''}${world.practice?'Practice — no record saved.':`${condition} Express ${targets.express}s · Send It ${targets.sendIt}s · Unhinged ${targets.unhinged}s. ${attempts} retries.`}${storageAvailable?'':' Storage unavailable; progress lasts this session.'}`;
   $('recipient').textContent=index<0?'Training complete. Take it to the city.':replies[index];
   $('next').textContent=index===deliveries.length-1?'Shift complete — dispatch board':index<0?'Start your shift ↗':'Next delivery ↗';
   $('overlay').hidden=false;clearInput();$('next').focus({preventScroll:true});drawBoard();
@@ -94,11 +96,12 @@ function frame(now){
     if(world.status==='dead'){deathDelay+=DT;if(deathDelay>=.35){attempts++;restart(world.station);}}
     else{step(world,{left:keys.has('KeyA')||keys.has('ArrowLeft'),right:keys.has('KeyD')||keys.has('ArrowRight'),down:keys.has('KeyS')||keys.has('ArrowDown'),jumpPressed,jumpReleased});jumpPressed=false;jumpReleased=false;
       for(const event of world.events)sound(event);
+      if(world.events.includes('package-hit')){$('feedback').textContent=`FRAGILE PARCEL · ${Math.round(world.parcelCondition)}% condition. Soften the next landing.`;$('feedback').hidden=false;feedbackUntil=now+3200;}
       if(world.events.includes('death')){$('feedback').textContent=`${world.failure.cause}. ${world.failure.hint}`;$('feedback').hidden=false;feedbackUntil=now+6500;}
       if(world.events.includes('complete'))completed();
     }accumulator=Math.max(0,accumulator-DT);
   }}
   render(world,{debug,reducedMotion:$('reduced-motion').checked,elapsed:paused?0:elapsed,resetCamera:cameraReset});cameraReset=false;
-  $('time').textContent=format(world.time);$('speed').textContent=`${Math.round(Math.abs(world.p.vx))} px/s`;if(now>feedbackUntil)$('feedback').hidden=true;requestAnimationFrame(frame);
+  $('time').textContent=format(world.time);$('speed').textContent=`${Math.round(Math.abs(world.p.vx))} px/s`;$('handling').textContent=handling(world);if(now>feedbackUntil)$('feedback').hidden=true;requestAnimationFrame(frame);
 }
 drawBoard();$('brief').textContent=level.brief;requestAnimationFrame(frame);

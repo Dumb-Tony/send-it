@@ -10,19 +10,19 @@ export function machineAt(m,time) {
   return {...m,x:m.x+(m.axis==='x'?m.distance*phase:0),y:m.y+(m.axis==='y'?m.distance*phase:0)};
 }
 export function createWorld(level) {
-  const world={level,p:null,time:0,ticks:0,started:false,status:'ready',deaths:0,practice:false,events:[],machines:[],parcel:false};
+  const world={level,p:null,time:0,ticks:0,started:false,status:'ready',deaths:0,practice:false,events:[],machines:[],parcel:false,parcelCondition:100,parcelFreshness:100,pickupTime:null,lastImpact:0};
   reset(world); return world;
 }
 export function reset(w,station=-1) {
   const s=station<0?w.level.spawn:w.level.stations[station];
   w.p={x:s.x,y:s.y,w:TUNE.width,h:TUNE.height,vx:0,vy:0,grounded:false,groundId:null,wall:0,coyote:0,buffer:0,cutBuffered:false,wallLock:0,facing:1,state:'air',slope:0,ledge:null,ledgeCooldown:0,coyoteMoverVy:0};
-  w.time=0;w.ticks=0;w.started=false;w.status='ready';w.parcel=false;w.practice=station>=0;w.station=station;w.events=[];w.failure=null;
+  w.time=0;w.ticks=0;w.started=false;w.status='ready';w.parcel=false;w.parcelCondition=100;w.parcelFreshness=100;w.pickupTime=null;w.lastImpact=0;w.practice=station>=0;w.station=station;w.events=[];w.failure=null;
   w.machines=w.level.movers.map(m=>({...machineAt(m,0),vx:0,vy:0,dx:0,dy:0}));
 }
 function jump(w,vx,vy) {const p=w.p;p.vx=vx;p.vy=vy;p.grounded=false;p.groundId=null;p.coyote=0;p.buffer=0;w.events.push('jump');}
 function die(w,cause,hint,objectId) {if(w.status==='dead')return;w.failure={cause,hint,objectId,x:w.p.x,y:w.p.y};w.status='dead';w.deaths++;w.events.push('death');}
 function objectives(w){
-  if(!w.parcel&&overlap(w.p,w.level.parcel)){w.parcel=true;w.events.push('pickup');}
+  if(!w.parcel&&overlap(w.p,w.level.parcel)){w.parcel=true;w.pickupTime=w.time;w.events.push('pickup');}
   if(w.parcel&&overlap(w.p,w.level.delivery)){w.status='complete';w.events.push('complete');}
 }
 function clearPose(p,blocks,hazards){return ![...blocks,...hazards].some(b=>overlap(p,b));}
@@ -57,6 +57,10 @@ export function step(w,input={},dt=DT) {
   if(!w.started&&(dir||input.jumpPressed||input.down)) {w.started=true;w.status='running';}
   if(!w.started)return;
   w.ticks++;w.time=w.ticks*dt;
+  if(w.parcel&&level.contract?.type==='HOT'){
+    w.parcelFreshness=Math.max(0,100-(w.time-w.pickupTime)*3.5);
+    if(w.parcelFreshness===0){die(w,'Delivery went cold','Once collected, hot deliveries need a direct route to the customer.','hot-contract');return;}
+  }
   w.machines=level.movers.map(m=>{const now=machineAt(m,w.time),old=machineAt(m,w.time-dt);return {...now,dx:now.x-old.x,dy:now.y-old.y,vx:(now.x-old.x)/dt,vy:(now.y-old.y)/dt};});
   const blocks=[...level.solids,...level.conveyors,...w.machines];
   p.ledgeCooldown=Math.max(0,p.ledgeCooldown-dt);
@@ -112,7 +116,15 @@ export function step(w,input={},dt=DT) {
     p.y+=p.vy*dt/count;
     for(const b of blocks)if(overlap(p,b)){
       if(beforeY+p.h<=b.y+Math.max(1,Math.abs(b.dy||0))&&p.vy>=0){
-        p.y=b.y-p.h;if(!wasGrounded&&p.vy>350)w.events.push('land');p.vy=0;p.grounded=true;p.groundId=b.id;
+        p.y=b.y-p.h;
+        if(!wasGrounded&&p.vy>350){
+          w.lastImpact=p.vy;w.events.push('land');
+          if(w.parcel&&level.contract?.type==='FRAGILE'&&p.vy>520){
+            w.parcelCondition=Math.max(0,w.parcelCondition-(p.vy-500)*.11);w.events.push('package-hit');
+            if(w.parcelCondition===0){die(w,'Parcel broken','Soften hard landings or find a route with fewer drops.','fragile-contract');return;}
+          }
+        }
+        p.vy=0;p.grounded=true;p.groundId=b.id;
       }else if(beforeY>=b.y+b.h-1&&p.vy<0){p.y=b.y+b.h;p.vy=0;}
     }
     for(const s of level.slopes){
