@@ -3,6 +3,11 @@ import assert from 'node:assert/strict';
 import {deliveries,medal,readProgress,recordDelivery,unlockedCount,progressKey} from '../src/campaign.js';
 import {createWorld,step,overlap} from '../src/physics.js';
 import {campaignRoute,scaffoldWallRoute} from './campaign-routes.js';
+test('rookie route contains two complete six-delivery shifts with unique jobs',()=>{
+  assert.equal(deliveries.length,12);
+  assert.deepEqual(deliveries.map(level=>level.shift),[1,1,1,1,1,1,2,2,2,2,2,2]);
+  assert.equal(new Set(deliveries.map(level=>level.id)).size,deliveries.length);
+});
 for(const [i,level] of deliveries.entries())test(`dispatch ${i+1}: complete delivery from spawn with ordinary inputs`,()=>{
   const w=createWorld(level),driver=campaignRoute(i);let picked=false;
   for(let t=0;t<7200&&w.status!=='complete'&&w.status!=='dead';t++){
@@ -15,7 +20,7 @@ for(const [i,level] of deliveries.entries())test(`dispatch ${i+1}: complete deli
 test('progress survives serialization, unlocks in order and keeps only improved records',()=>{
   const data=new Map(),storage={getItem:k=>data.get(k),setItem:(k,v)=>data.set(k,v)};
   const progress=readProgress(storage);assert.equal(unlockedCount(progress),1);
-  for(let i=0;i<deliveries.length;i++){recordDelivery(progress,deliveries[i],10);assert.equal(unlockedCount(progress),Math.min(i+2,6));}
+  for(let i=0;i<deliveries.length;i++){recordDelivery(progress,deliveries[i],10);assert.equal(unlockedCount(progress),Math.min(i+2,deliveries.length));}
   assert.equal(recordDelivery(progress,deliveries[0],12),false);recordDelivery(progress,deliveries[0],9);
   storage.setItem(progressKey,JSON.stringify(progress));assert.deepEqual(readProgress(storage),progress);
 });

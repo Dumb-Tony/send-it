@@ -261,9 +261,11 @@ Release checks: no console errors, no missing assets, cold-load and nested-path 
 
 Gate: stable collision and reset, reliable machine combinations, all intended lab zones reachable, standard parcel delivery possible, no forced waiting, and the subjective 20-minute test passes. The first implementation is an iteration toward that gate, not the completed milestone.
 
-### M2 — Street Level + Construction slice
+### M2 — Street Level + Construction slice (playable content complete)
 
 Lock a movement baseline; create level loader/validation; build the 12 deliveries in graybox; verify routes; add standard/fragile/hot-food objectives; tune real rank targets; add original courier/city art and sound; implement district progression, tips, first cosmetics and optional secret. Evaluate personal-best ghost after core content is stable. Gate: new player understands controls and finishes first district, expert finds multiple routes, save migration and all browser checks pass.
+
+Build 11 completes the twelve-delivery route count with two sequential six-job shifts and verified ordinary-input paths. Objective modifiers, tips, cosmetics, authored sound, wider player medal data, and formal cross-browser certification remain within M2 before its full quality gate closes.
 
 ### M3 — Release-quality foundation
 

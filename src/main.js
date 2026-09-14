@@ -20,7 +20,7 @@ let storage;try{storage=localStorage;storage.getItem(progressKey);}catch{storage
 const progress=readProgress(storage);
 const format=s=>`${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toFixed(3).padStart(6,'0')}`;
 const labKey=`send-it:pb:${PHYSICS_VERSION}:${lab.id}:${lab.version}`;
-const replies=['“Still warm. You are a miracle.”','“You made it! We close in literally one second.”','“Perfect. Now we can stop the conveyor.”','“Could you water the plants on your way down?”','“Actually, could you put it upstairs? Kidding.”','“Thank you! My phone was at one percent.”'];
+const replies=['“Still warm. You are a miracle.”','“You made it! We close in literally one second.”','“Perfect. Now we can stop the conveyor.”','“Could you water the plants on your way down?”','“Actually, could you put it upstairs? Kidding.”','“You avoided the paint? That is a first.”','“We moved yesterday. Sorry.”','“The soup is still technically soup!”','“The lift worked? Write down the date.”','“Could you close the other window too?”','“Blue door. Yes. That one. Obviously.”','“Thank you! My phone was at one percent.”'];
 $('reduced-motion').checked=matchMedia('(prefers-reduced-motion: reduce)').matches;
 function clearInput(){keys.clear();jumpPressed=false;jumpReleased=false;accumulator=0;}
 function pause(value){paused=value;clearInput();$('paused').hidden=!value||boardOpen||world.status==='complete';}
@@ -30,9 +30,16 @@ function drawBoard(){
   $('shift-progress').textContent=`${count} / ${deliveries.length} delivered`;
   $('continue').textContent=count===deliveries.length?'Replay your shift ↗':count?'Continue your shift ↗':'Start your shift ↗';
   $('jobs').replaceChildren();
+  let currentShift=0;
   deliveries.forEach((l,i)=>{
+    if(l.shift!==currentShift){
+      currentShift=l.shift;
+      const heading=document.createElement('h2');heading.className='shift-divider';
+      heading.textContent=currentShift===1?'SHIFT ONE / LEARN THE STREETS':'SHIFT TWO / EARN THE JACKET';
+      $('jobs').append(heading);
+    }
     const b=document.createElement('button');b.className='job'+(progress.records[l.id]?' delivered':'');b.disabled=i>=unlocked;
-    const label=document.createElement('span');label.className='eyebrow';label.textContent=`0${i+1} / ${l.district}`;
+    const label=document.createElement('span');label.className='eyebrow';label.textContent=`${String(i+1).padStart(2,'0')} / ${l.district}`;
     const title=document.createElement('strong');title.textContent=l.name;
     const detail=document.createElement('span');detail.className='job-status';const t=progress.records[l.id];
     detail.textContent=t?`${medal(t,l.targets)} · ${format(t)}`:i>=unlocked?'Complete the previous delivery to unlock':'Ready for dispatch ↗';

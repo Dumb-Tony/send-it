@@ -1,12 +1,13 @@
 import {standardRoute,withJumpReleases} from './routes.js';
 export function campaignRoute(index){
-  if(index===5)return withJumpReleases(standardRoute());
+  if(index===11)return withJumpReleases(standardRoute());
   let launched=false,aloft=false;
   return withJumpReleases(w=>{
     const p=w.p;
     if(index===0)return {right:true};
     if(index===1)return {right:true,down:p.x>480&&p.x<860};
     if(index===2){const jump=!launched&&p.x>900;if(jump)launched=true;return {right:true,jumpPressed:jump};}
+    if(index!==3&&index!==4)return {right:true};
     const target=index===3?930:1420,roof=index===3?540:660;
     if(p.y<roof-75)aloft=true;
     if(aloft)return {right:true};

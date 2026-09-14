@@ -2,6 +2,8 @@
 
 A momentum courier platformer. **If there's an address, we deliver.**
 
+**Build 11 / Rookie Route:** twelve sequential deliveries across two shifts, including six new authored jobs built around awnings, conveyors, cargo lifts, crosswinds and a final mixed-mechanic route. The dispatch board groups both shifts and preserves existing records. Movement remains on the accepted `lab-0.3` tuning.
+
 **Build 08 — courier focus:** rebuilt character silhouette and expressive face, navy/cream outline for background separation, articulated running/jumping/sliding poses, blinking idle, landing compression and delivery celebration. The city and gameplay are unchanged.
 
 **Build 07 / The Rookie:** a more defined courier and portrait, distinct brick/concrete/stucco/metal/wood/fabric/asphalt materials, reflective glass, directional surface lighting, architectural shadows and a courier contact shadow. The update preserves gameplay and saved progress.
@@ -14,9 +16,9 @@ A momentum courier platformer. **If there's an address, we deliver.**
 
 The public game is hosted on GitHub Pages and works without a local server. Share that play link with friends. Desktop keyboard controls are required; Brave is expected to work, but has not yet been separately certified.
 
-**Build 04 / First Shift** is the first campaign alpha: six short deliveries across Street Level, Construction and the Skyline, with an unlockable dispatch board, recipient messages, local medals and personal bests. Five introductory courses lead into a capstone using the original lab course. The movement playground remains available separately.
+The Rookie Route is the campaign alpha: twelve short deliveries across Street Level, Construction and the Skyline, with an unlockable dispatch board, recipient messages, local medals and personal bests. The movement playground remains available separately.
 
-The accepted Build 03 physics are unchanged: run, jump, wall-kick, slide, catch slow ledges, borrow conveyor speed and launch from machinery. The campaign is a foundation for the planned 12-delivery slice, not the finished full game.
+The accepted Build 03 physics are unchanged: run, jump, wall-kick, slide, catch slow ledges, borrow conveyor speed and launch from machinery.
 
 ## Run locally
 
@@ -51,9 +53,9 @@ The timer starts with movement. Death retries after 350 ms. Campaign progress sa
 node --test tests/*.test.mjs
 ```
 
-See [implementation GDD](docs/IMPLEMENTATION_GDD.md), [First Shift status](docs/MILESTONE_2.md), and [playtest protocol](docs/PLAYTEST.md). Physics is independent of Canvas and DOM; no local build step is required. Every push to main runs the regression suite and publishes the game through the GitHub Pages workflow. Only game files enter the deployment artifact.
+See [implementation GDD](docs/IMPLEMENTATION_GDD.md), [Rookie Route status](docs/MILESTONE_3.md), and [playtest protocol](docs/PLAYTEST.md). Physics is independent of Canvas and DOM; no local build step is required. Every push to main runs the regression suite and publishes the game through the GitHub Pages workflow. Only game files enter the deployment artifact.
 
-For repeatable visual verification, open `/tests/playtest.html` on the running server. It includes all six campaign deliveries, a scaffold wall route, original lab routes and the ledge check. They use ordinary inputs through the same simulation and renderer; they never warp or save records. `/tests/session.html` replays the first two deliveries through the playable page and verifies results, unlocks and persistence after reload. It writes earned progress only on that development origin. These are automated replays, not human feel sessions. Test pages are excluded from deployment.
+For repeatable visual verification, open `/tests/playtest.html` on the running server. It includes all twelve campaign deliveries, a scaffold wall route, original lab routes and the ledge check. They use ordinary inputs through the same simulation and renderer; they never warp or save records. `/tests/session.html` replays the first two deliveries through the playable page and verifies results, unlocks and persistence after reload. It writes earned progress only on that development origin. These are automated replays, not human feel sessions. Test pages are excluded from deployment.
 
 Build 09 gives the courier and city a shared rounded cartoon treatment: expressive proportions, soft volume, chunky shoes, framed shop signs and readable platform lips. Movement tuning is unchanged.
 
