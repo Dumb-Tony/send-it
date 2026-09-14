@@ -9,7 +9,7 @@
 3. **Third floor, rear entrance:** wall-kick up a fire escape to collect a fragile station clock, then carry it across connected signal rooftops.
 4. **Last train home:** cross the full station through a shutter, walkway, track gap, kiosk and platform clutter; collect the signature at the far end and traverse the obstacles again in reverse.
 
-Transit uses a cooler dusk grade, warm overhead power lines and station silhouettes over the existing illustrated city asset. Its third-shift dispatch group unlocks after the Skyline capstone. Existing twelve-job saves naturally unlock the first Transit delivery when all prior records are present.
+Transit uses a cooler dusk grade over the existing illustrated city asset. Its third-shift dispatch group unlocks after the Skyline capstone. Existing twelve-job saves naturally unlock the first Transit delivery when all prior records are present.
 
 ## Route gates
 

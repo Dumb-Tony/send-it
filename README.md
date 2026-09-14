@@ -2,7 +2,7 @@
 
 A momentum courier platformer. **If there's an address, we deliver.**
 
-**Build 14 / Night Service:** adds a four-delivery Transit district and a third shift, bringing the campaign to sixteen jobs. New routes combine fare-gate slides, baggage walkways, marked track gaps, paired station drafts, fire-escape wall kicks, rooftop crossings, and a final out-and-back obstacle course. Transit receives its own dusk color treatment, overhead lines, contracts, recipient replies, progression group, and verified routes.
+**Build 14 / Night Service:** adds a four-delivery Transit district and a third shift, bringing the campaign to sixteen jobs. New routes combine fare-gate slides, baggage walkways, marked track gaps, paired station drafts, fire-escape wall kicks, rooftop crossings, and a final out-and-back obstacle course. Transit receives its own dusk color treatment, contracts, recipient replies, progression group, and verified routes.
 
 **Build 13 / Special Handling:** adds five contract categories across the Rookie Route. Hot deliveries lose freshness after collection; fragile parcels take damage from hard landings and can break; oversized and signature jobs call out their route requirement. Contract type appears on every dispatch card, live package status sits in the HUD, and the result records handling quality.
 
