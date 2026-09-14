@@ -2,6 +2,8 @@
 
 A momentum courier platformer. **If there's an address, we deliver.**
 
+**Build 12 / Real Routes:** reconstructs the campaign around required mechanics and authored collection points. Parcels may be beyond shutters, on scaffolds and rooftops, or across town; later routes require chained belts, wall kicks, cargo-lift timing and fan transfers. A larger hot-pink parcel with a cream label, dark outline, glow and locator beam stays readable against the illustrated city.
+
 **Build 11 / Rookie Route:** twelve sequential deliveries across two shifts, including six new authored jobs built around awnings, conveyors, cargo lifts, crosswinds and a final mixed-mechanic route. The dispatch board groups both shifts and preserves existing records. Movement remains on the accepted `lab-0.3` tuning.
 
 **Build 08 — courier focus:** rebuilt character silhouette and expressive face, navy/cream outline for background separation, articulated running/jumping/sliding poses, blinking idle, landing compression and delivery celebration. The city and gameplay are unchanged.

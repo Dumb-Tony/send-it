@@ -46,7 +46,14 @@ export function createRenderer(canvas){
     text(campaign?'SEND IT COURIER CO.  /  NO ADDRESS TOO UNREASONABLE':'RECOVERY FLOOR  /  A FALL CAN BE A NEW ROUTE',campaign?65:1180,945,16,'#a6b8bb');
     const d=w.level.delivery;
     drawBay(ctx,d,w.parcel,animationTime);
-    if(!w.parcel){const q=w.level.parcel;roundedPanel(ctx,q.x,q.y,q.w,q.h,'#ffcc65',5);roundedPanel(ctx,q.x+9,q.y,4,q.h,'#fff2bd',1);text('PICK UP',q.x-12,q.y-17,10,'#f3c77a');}
+    if(!w.parcel){
+      const q=w.level.parcel,pulse=.5+.5*Math.sin(animationTime*5),cx=q.x+q.w/2;
+      ctx.save();ctx.globalAlpha=.22+pulse*.16;ctx.fillStyle='#ff3fd1';ctx.beginPath();ctx.ellipse(cx,q.y+q.h/2,q.w*.95,q.h*.9,0,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+      ctx.strokeStyle='#fff8d8';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(cx,q.y-52-pulse*8);ctx.lineTo(cx,q.y-8);ctx.stroke();
+      roundedPanel(ctx,q.x,q.y,q.w,q.h,'#ff3f81',7);ctx.strokeStyle='#172c45';ctx.lineWidth=4;ctx.strokeRect(q.x+2,q.y+2,q.w-4,q.h-4);
+      roundedPanel(ctx,q.x+q.w*.42,q.y,5,q.h,'#fff1a8',1);roundedPanel(ctx,q.x+5,q.y+7,q.w-10,8,'#fff1a8',2);
+      ctx.restore();text('COLLECT',q.x-7,q.y-68-pulse*8,11,'#fff8d8','Arial');
+    }
     if(resetCamera)trail=[];
     if(!reducedMotion&&Math.abs(p.vx)>420&&w.status==='running'){trail.push({x:p.x,y:p.y,h:p.h});if(trail.length>8)trail.shift();}else trail.shift();
     trail.forEach((v,i)=>{ctx.globalAlpha=i/trail.length*.18;rect(v.x,v.y,p.w,v.h,'#f5c66b');});ctx.globalAlpha=1;

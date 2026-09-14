@@ -1,13 +1,33 @@
 import {standardRoute,withJumpReleases} from './routes.js';
 export function campaignRoute(index){
   if(index===11)return withJumpReleases(standardRoute());
+  if(index===4)return scaffoldWallRoute();
   let launched=false,aloft=false;
+  let jumpZone=0,liftStage=0;
   return withJumpReleases(w=>{
     const p=w.p;
-    if(index===0)return {right:true};
+    if(index===0){const jump=!launched&&p.x>270;if(jump)launched=true;return {right:true,jumpPressed:jump};}
     if(index===1)return {right:true,down:p.x>480&&p.x<860};
     if(index===2){const jump=!launched&&p.x>900;if(jump)launched=true;return {right:true,jumpPressed:jump};}
-    if(index!==3&&index!==4)return {right:true};
+    if(index===5)return {right:true,down:p.x>480&&p.x<930};
+    if(index===6)return w.parcel?{left:true}:{right:true};
+    if(index===7){const zones=[800,1480],jump=jumpZone<2&&p.x>zones[jumpZone];if(jump)jumpZone++;return {right:true,jumpPressed:jump};}
+    if(index===8){
+      if(liftStage===0){
+        if(p.x>760&&w.machines[0].y>795){liftStage=1;return {right:true,jumpPressed:true};}
+        return p.x>790?{left:true}:{right:true};
+      }
+      if(liftStage===1){if(p.groundId==='cargo-lift'&&w.machines[0].y<620){liftStage=2;return {right:true,jumpPressed:true};}if(w.machines[0].y<650)return {right:true};return p.x>970?{left:true}:{right:true};}
+      if(liftStage===2&&p.groundId==='transfer-beam'){liftStage=3;return {right:true};}
+      if(liftStage===3){if(p.groundId==='transfer-beam'&&p.x>1280)return {right:true,jumpPressed:true};if(!p.grounded)liftStage=4;return {right:true};}
+      return {right:true};
+    }
+    if(index===10){
+      const jump=!launched&&p.x>820;if(jump)launched=true;
+      if(w.parcel&&p.x>1200&&!aloft){if(p.y<610)aloft=true;else return p.x>1340?{left:true}:{right:true};}
+      return {right:true,jumpPressed:jump};
+    }
+    if(index!==3)return {right:true};
     const target=index===3?930:1420,roof=index===3?540:660;
     if(p.y<roof-75)aloft=true;
     if(aloft)return {right:true};

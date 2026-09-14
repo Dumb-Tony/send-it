@@ -9,13 +9,25 @@ test('rookie route contains two complete six-delivery shifts with unique jobs',(
   assert.equal(new Set(deliveries.map(level=>level.id)).size,deliveries.length);
 });
 for(const [i,level] of deliveries.entries())test(`dispatch ${i+1}: complete delivery from spawn with ordinary inputs`,()=>{
-  const w=createWorld(level),driver=campaignRoute(i);let picked=false;
+  const w=createWorld(level),driver=campaignRoute(i);let picked=false,jumps=0,wallJumps=0,minY=w.p.y,sawLeft=false,sawRight=false;const states=new Set(),grounds=new Set();
   for(let t=0;t<7200&&w.status!=='complete'&&w.status!=='dead';t++){
-    step(w,driver(w));picked ||= w.events.includes('pickup');
+    const input=driver(w);sawLeft ||= !!input.left;sawRight ||= !!input.right;if(input.jumpPressed){jumps++;if(w.p.wall)wallJumps++;}step(w,input);picked ||= w.events.includes('pickup');minY=Math.min(minY,w.p.y);states.add(w.p.state);if(w.p.groundId)grounds.add(w.p.groundId);
     for(const b of [...level.solids,...level.conveyors,...w.machines])assert.ok(!overlap({...w.p,x:w.p.x+.02,y:w.p.y+.02,w:w.p.w-.04,h:w.p.h-.04},b),`${level.id} penetrated ${b.id} at ${w.time}`);
   }
   assert.equal(w.status,'complete',JSON.stringify({id:level.id,x:w.p.x,y:w.p.y,failure:w.failure}));
   assert.ok(picked);assert.equal(w.practice,false);assert.ok(w.time<level.targets.express);
+  if(i===0)assert.ok(jumps>0,'first route requires its introductory jump');
+  if(i===1||i===5)assert.ok(states.has('slide'),'shutter routes require a slide');
+  if(i===2)assert.ok(grounds.has('belt')&&jumps>0,'warehouse route requires belt launch');
+  if(i===3||i===9||i===10)assert.ok(minY<650,'fan route must leave street level');
+  if(i===4)assert.ok(wallJumps>=3,'scaffold parcel requires wall kicks');
+  if(i===6)assert.ok(sawLeft&&sawRight,'return job requires a round trip');
+  if(i===7)assert.ok(grounds.has('market-belt')&&grounds.has('kitchen-belt')&&jumps>=2,'lunch route chains both belts');
+  if(i===8)assert.ok(grounds.has('cargo-lift'),'upper-site delivery requires the cargo lift');
+});
+test('parcel collection points are authored throughout the route instead of beside every spawn',()=>{
+  assert.ok(deliveries.filter(level=>Math.abs(level.parcel.x-level.spawn.x)>400).length>=8);
+  assert.ok(deliveries.filter(level=>level.parcel.y<750).length>=3);
 });
 test('progress survives serialization, unlocks in order and keeps only improved records',()=>{
   const data=new Map(),storage={getItem:k=>data.get(k),setItem:(k,v)=>data.set(k,v)};

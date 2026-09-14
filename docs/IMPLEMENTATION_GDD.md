@@ -267,6 +267,8 @@ Lock a movement baseline; create level loader/validation; build the 12 deliverie
 
 Build 11 completes the twelve-delivery route count with two sequential six-job shifts and verified ordinary-input paths. Objective modifiers, tips, cosmetics, authored sound, wider player medal data, and formal cross-browser certification remain within M2 before its full quality gate closes.
 
+Build 12 reconstructs those jobs around mandatory route actions rather than a flat recovery floor. The learning order now moves from jump and slide gates into conveyor gaps, fans, wall climbing, a full out-and-back collection, chained belts, moving lifts and mixed-mechanic upper routes. Parcel locations are part of route planning, with collection points spread through each course and several placed above street level.
+
 ### M3 — Release-quality foundation
 
 Controller/remapping, accessibility settings, export/import, replay versions, profiling, art/audio consistency and public static build. Establish issue triage from external playtests. Gate: broad browser validation, clear versioning, no known blocker or progress-loss defect, and repeatable deploy/rollback.
